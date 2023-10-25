@@ -1,25 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import styled from "styled-components";
+import SideBar from "./Components/Organisms/SideBar";
+import LoginPage from "./Components/Pages/Login";
+import AdminDashboard from "./Components/Pages/AdminDashboard";
+
+function MainContent() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const location = useLocation(); // Now, this is inside the context of Router
+
+  const toggleSidebar = () => {
+    console.log("Toggling sidebar");
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const ContentContainer = styled.div`
+    margin-left: ${isSidebarOpen ? "250px" : "0"};
+    transition: margin-left 0.3s;
+  `;
+
+  return (
+    <div className="App">
+      {location.pathname !== "/" && ( // Check the current pathname
+        <SideBar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      )}
+      <ContentContainer>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/adminDashboard" element={<AdminDashboard />} />
+        </Routes>
+      </ContentContainer>
+    </div>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <MainContent />
+    </Router>
   );
 }
 
