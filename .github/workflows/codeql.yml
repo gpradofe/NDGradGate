@@ -1,0 +1,44 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '25 15 * * 5'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ${{ (matrix.language == 'csharp' && 'windows-latest') || 'ubuntu-latest' }}
+    timeout-minutes: ${{ (matrix.language == 'csharp' && 120) || 360 }}
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript', 'csharp' ]
+        # CodeQL supports [ 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript', 'python', 'ruby', 'swift' ]
+        # Note: Use 'javascript' for JavaScript analysis and 'csharp' for C# analysis
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+        # You can add or override queries here
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+      # If the Autobuild step fails, you may need to customize the build process.
+      # For C#, this might involve using MSBuild or dotnet CLI commands.
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
