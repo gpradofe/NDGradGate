@@ -1,0 +1,72 @@
+# Frontend changes
+frontend:
+  - FrontEnd/**/*
+
+# Backend changes
+backend:
+  - '**/*.cs'
+  - '**/*.csproj'
+
+# Documentation changes
+documentation:
+  - '**/*.md'
+  - '**/*.docx'
+  - 'docs/**/*'
+  - 'wiki/**/*'
+
+# Test changes
+tests:
+  - '**/*Test.cs'
+  - '**/*Spec.js'
+  - '**/test/**/*'
+  - '**/tests/**/*'
+
+# React specific changes
+react:
+  - FrontEnd/**/*.jsx
+  - FrontEnd/**/*.js
+
+# Styling changes (CSS, Sass)
+styles:
+  - '**/*.css'
+  - '**/*.scss'
+  - '**/*.sass'
+
+# CI/CD and workflows
+ci:
+  - '.github/workflows/**/*'
+  - 'ci/**/*'
+
+# Configuration files
+config:
+  - '**/*.json'
+  - '**/*.config'
+  - '**/*.yaml'
+  - '**/*.yml'
+  - '**/*.xml'
+
+# Database related changes
+database:
+  - '**/*.sql'
+  - '**/*.db'
+  - '**/*.efsql'
+
+# Markdown files (could be part of documentation)
+markdown:
+  - '**/*.md'
+
+# Images and other binary files
+assets:
+  - '**/*.png'
+  - '**/*.jpg'
+  - '**/*.jpeg'
+  - '**/*.gif'
+  - '**/*.svg'
+  - '**/*.ico'
+  - 'assets/**/*'
+
+# Scripts (like shell or Python scripts)
+scripts:
+  - '**/*.sh'
+  - '**/*.py'
+  - '**/*.bat'
