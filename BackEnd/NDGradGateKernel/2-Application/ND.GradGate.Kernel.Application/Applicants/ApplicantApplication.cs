@@ -19,6 +19,7 @@ namespace ND.GradGate.Kernel.Application.Applicants
         private readonly IGetApplicantsInfoByNameAction _getApplicantsInfoByNameAction;
         private readonly IUpdateApplicantInfoByIdAction _updateApplicantInfoByIdAction;
         private readonly ICreateApplicantInfoByIdAction _createApplicantInfoByIdAction;
+        private readonly IDeleteApplicantInfoByIdAction _deleteApplicantInfoByIdAction;
         #endregion
 
         #region Constructors
@@ -93,6 +94,21 @@ namespace ND.GradGate.Kernel.Application.Applicants
                 ApplicantDto applicant = await _createApplicantInfoByIdAction.CreateApplicantInfoAsync(applicantDto);
 
                 return applicant;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+        }
+
+        public async Task DeleteApplicantInfoAsync(int refId)
+        {
+            try
+            {
+                _logger.LogInformation($"Delete applicant data with RefID @{refId}.");
+
+                await _deleteApplicantInfoByIdAction.DeleteApplicantInfoAsync(refId);
             }
             catch (Exception ex)
             {

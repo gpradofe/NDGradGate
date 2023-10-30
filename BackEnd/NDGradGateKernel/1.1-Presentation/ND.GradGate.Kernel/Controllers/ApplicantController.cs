@@ -106,6 +106,21 @@ namespace ND.GradGate.Kernel.Controllers
             return CreatedAtAction(nameof(GetApplicantByIdAsync), new { id = applicant.Ref }, applicant);
         }
 
+        [HttpDelete("DeleteApplicant/{id}")]
+        public async Task<IActionResult> DeleteApplicant(int id)
+        {
+            var applicant = await _applicantApplication.GetApplicantByIdAsync(id);
+
+            if (applicant == null)
+            {
+                return NotFound();
+            }
+
+            await _applicantApplication.DeleteApplicantInfoAsync(id);
+
+            return NoContent();
+        }
+
 
         #endregion
     }
