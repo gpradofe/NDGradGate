@@ -6,13 +6,13 @@ using Serilog.Context;
 
 namespace ND.GradGate.Kernel.Controllers
 {
-    public class GradGateController : ApiControllerBase<GradGateController>
+    public class ApplicantController : ApiControllerBase<ApplicantController>
     {
         #region Attributes
         private readonly IApplicantApplication _applicantApplication;
         #endregion
 
-        public GradGateController(ILogger<GradGateController> logger, IApplicantApplication applicantApplication) : base(logger)
+        public ApplicantController(ILogger<ApplicantController> logger, IApplicantApplication applicantApplication) : base(logger)
         {
             _applicantApplication = applicantApplication;
         }
