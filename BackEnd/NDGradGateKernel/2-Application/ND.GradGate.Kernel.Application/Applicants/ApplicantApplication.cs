@@ -18,6 +18,7 @@ namespace ND.GradGate.Kernel.Application.Applicants
         private readonly IGetApplicantInfoByIdAction _getApplicantInfoByIdAction;
         private readonly IGetApplicantsInfoByNameAction _getApplicantsInfoByNameAction;
         private readonly IUpdateApplicantInfoByIdAction _updateApplicantInfoByIdAction;
+        private readonly ICreateApplicantInfoByIdAction _createApplicantInfoByIdAction;
         #endregion
 
         #region Constructors
@@ -73,6 +74,23 @@ namespace ND.GradGate.Kernel.Application.Applicants
                 _logger.LogInformation($"Update applicant data with RefID @{refId}.");
 
                 ApplicantDto applicant = await _updateApplicantInfoByIdAction.UpdateApplicantInfoAsync(refId, applicantDto);
+
+                return applicant;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<ApplicantDto> CreateApplicantInfoAsync(ApplicantDto applicantDto)
+        {
+            try
+            {
+                _logger.LogInformation($"Create applicant data.");
+
+                ApplicantDto applicant = await _createApplicantInfoByIdAction.CreateApplicantInfoAsync(applicantDto);
 
                 return applicant;
             }
