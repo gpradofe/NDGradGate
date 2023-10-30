@@ -79,6 +79,25 @@ namespace ND.GradGate.Kernel.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateApplicant(int id, [FromBody] ApplicantDto updatedApplicant)
+        {
+            var applicant = await _applicantApplication.GetApplicantByIdAsync(id);
+            if (applicant == null)
+            {
+                return NotFound();
+            }
+
+            applicant.LastName = updatedApplicant.LastName;
+            applicant.FirstName = updatedApplicant.FirstName;
+            applicant.Email = updatedApplicant.Email;
+            // Update other properties as needed
+
+            await _applicantApplication.UpdateApplicantInfoAsync(id, applicant);
+
+            return NoContent();
+        }
+
 
         #endregion
     }

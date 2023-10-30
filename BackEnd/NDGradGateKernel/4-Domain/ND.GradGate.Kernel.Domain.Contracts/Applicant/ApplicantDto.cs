@@ -10,7 +10,8 @@ namespace ND.GradGate.Kernel.Domain.Contracts.Applicant
     public class ApplicantDto
     {
         public int Ref { get; set; }
-        public string FullName { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
         public string Email { get; set; }
         public char Sex { get; set; }
         public string Ethnicity { get; set; }

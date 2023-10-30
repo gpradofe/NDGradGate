@@ -39,7 +39,8 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
                 var response = applicants.Select(applicant => new ApplicantDto
                 {
                     Ref = applicant.Ref,
-                    FullName = $"{applicant.FirstName} {applicant.LastName}",
+                    LastName = applicant.LastName,
+                    FirstName = applicant.FirstName,
                     Email = applicant.Email,
                     Sex = applicant.Sex,
                     Ethnicity = applicant.Ethnicity,

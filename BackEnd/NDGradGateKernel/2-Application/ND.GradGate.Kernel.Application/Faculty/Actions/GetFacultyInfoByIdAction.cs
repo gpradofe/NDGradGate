@@ -39,7 +39,8 @@ namespace ND.GradGate.Kernel.Application.Facultys.Actions
                 FacultyDto response = new FacultyDto
                 {
                     Ref = Faculty.Ref,
-                    FullName = $"{Faculty.FirstName} {Faculty.LastName}",
+                    LastName = Faculty.LastName,
+                    FirstName = Faculty.FirstName,
                 };
 
                 return response;
