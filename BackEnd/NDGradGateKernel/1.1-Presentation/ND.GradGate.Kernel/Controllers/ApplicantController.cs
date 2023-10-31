@@ -79,7 +79,7 @@ namespace ND.GradGate.Kernel.Controllers
             }
         }
 
-        [HttpPut("UpdateApplicant/{id}")]
+        [HttpPut("UpdateApplicant/{refId}")]
         public async Task<IActionResult> UpdateApplicant(int id, [FromBody] ApplicantDto updatedApplicant)
         {
             var applicant = await _applicantApplication.GetApplicantByIdAsync(id);
@@ -106,7 +106,7 @@ namespace ND.GradGate.Kernel.Controllers
             return CreatedAtAction(nameof(GetApplicantByIdAsync), new { id = applicant.Ref }, applicant);
         }
 
-        [HttpDelete("DeleteApplicant/{id}")]
+        [HttpDelete("DeleteApplicant/{refId}")]
         public async Task<IActionResult> DeleteApplicant(int id)
         {
             var applicant = await _applicantApplication.GetApplicantByIdAsync(id);
