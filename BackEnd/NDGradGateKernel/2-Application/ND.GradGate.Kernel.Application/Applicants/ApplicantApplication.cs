@@ -25,11 +25,17 @@ namespace ND.GradGate.Kernel.Application.Applicants
         #region Constructors
         public ApplicantApplication(ILogger<ApplicantApplication> logger,
                                     IGetApplicantInfoByIdAction getApplicantInfoByIdAction,
-                                    IGetApplicantsInfoByNameAction getApplicantsInfoByNameAction)
+                                    IGetApplicantsInfoByNameAction getApplicantsInfoByNameAction,
+                                    IUpdateApplicantInfoByIdAction updateApplicantInfoByIdAction,
+                                    ICreateApplicantInfoByIdAction createApplicantInfoByIdAction,
+                                    IDeleteApplicantInfoByIdAction deleteApplicantInfoByIdAction)
         {
             _logger = logger;
             _getApplicantInfoByIdAction = getApplicantInfoByIdAction;
             _getApplicantsInfoByNameAction = getApplicantsInfoByNameAction;
+            _updateApplicantInfoByIdAction = updateApplicantInfoByIdAction;
+            _createApplicantInfoByIdAction = createApplicantInfoByIdAction;
+            _deleteApplicantInfoByIdAction = deleteApplicantInfoByIdAction;
         }
         #endregion
 

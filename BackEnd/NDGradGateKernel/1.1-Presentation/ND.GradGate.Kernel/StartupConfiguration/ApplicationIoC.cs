@@ -18,6 +18,9 @@ namespace ND.GradGate.Kernel.StartupConfiguration
             #region Actions
             services.AddSingleton<IGetApplicantsInfoByNameAction, GetApplicantsInfoByNameAction>();
             services.AddSingleton<IGetApplicantInfoByIdAction, GetApplicantInfoByIdAction>();
+            services.AddSingleton<IUpdateApplicantInfoByIdAction, UpdateApplicantInfoByIdAction>();
+            services.AddSingleton<ICreateApplicantInfoByIdAction, CreateApplicantInfoByIdAction>();
+            services.AddSingleton<IDeleteApplicantInfoByIdAction, DeleteApplicantInfoByIdAction>();
             #endregion
             #region Application
             services.AddSingleton<IApplicantApplication, ApplicantApplication>();

@@ -80,9 +80,9 @@ namespace ND.GradGate.Kernel.Controllers
         }
 
         [HttpPut("UpdateApplicant/{refId}")]
-        public async Task<IActionResult> UpdateApplicant(int id, [FromBody] ApplicantDto updatedApplicant)
+        public async Task<IActionResult> UpdateApplicant([FromRoute] int refId, [FromBody] ApplicantDto updatedApplicant)
         {
-            var applicant = await _applicantApplication.GetApplicantByIdAsync(id);
+            var applicant = await _applicantApplication.GetApplicantByIdAsync(refId);
             if (applicant == null)
             {
                 return NotFound();
@@ -93,7 +93,7 @@ namespace ND.GradGate.Kernel.Controllers
             applicant.Email = updatedApplicant.Email;
             // Update other properties as needed
 
-            await _applicantApplication.UpdateApplicantInfoAsync(id, applicant);
+            await _applicantApplication.UpdateApplicantInfoAsync(refId, applicant);
 
             return NoContent();
         }
@@ -107,16 +107,16 @@ namespace ND.GradGate.Kernel.Controllers
         }
 
         [HttpDelete("DeleteApplicant/{refId}")]
-        public async Task<IActionResult> DeleteApplicant(int id)
+        public async Task<IActionResult> DeleteApplicant([FromRoute] int refId)
         {
-            var applicant = await _applicantApplication.GetApplicantByIdAsync(id);
+            var applicant = await _applicantApplication.GetApplicantByIdAsync(refId);
 
             if (applicant == null)
             {
                 return NotFound();
             }
 
-            await _applicantApplication.DeleteApplicantInfoAsync(id);
+            await _applicantApplication.DeleteApplicantInfoAsync(refId);
 
             return NoContent();
         }
