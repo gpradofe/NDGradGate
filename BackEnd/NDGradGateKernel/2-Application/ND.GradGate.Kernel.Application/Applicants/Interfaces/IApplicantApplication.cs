@@ -11,6 +11,9 @@ namespace ND.GradGate.Kernel.Application.Applicants.Interfaces
     {
         Task<ApplicantDto> GetApplicantByIdAsync(int refId);
         Task<List<ApplicantDto>> GetApplicantsByNameAsync(string firstName, string lastName);
+        Task<ApplicantDto> UpdateApplicantInfoAsync(int refId, ApplicantDto applicantDto);
+        Task<bool> CreateApplicantInfoAsync(ApplicantDto applicantDto);
+        Task<bool> DeleteApplicantInfoAsync(int refId);
 
 
     }

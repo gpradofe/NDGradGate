@@ -18,10 +18,10 @@ namespace ND.GradGate.Kernel.Domain.ApplicantData
         public string DepartmentRecommendation { get; set; }
 
         // Relationships
-        public virtual ICollection<AcademicHistory> AcademicHistories { get; set; }
-        public virtual ICollection<ApplicationDataValue> ApplicationDataValues { get; set; }
-        public virtual ICollection<ApplicantAdvisorLink> ApplicantAdvisorLinks { get; set; }
-        public virtual ICollection<ReviewerAssignment> ReviewerAssignments { get; set; }
+        public virtual ICollection<AcademicHistory>? AcademicHistories { get; set; }
+        public virtual ICollection<ApplicationDataValue>? ApplicationDataValues { get; set; }
+        public virtual ICollection<ApplicantAdvisorLink>? ApplicantAdvisorLinks { get; set; }
+        public virtual ICollection<ReviewerAssignment>? ReviewerAssignments { get; set; }
     }
 
 }

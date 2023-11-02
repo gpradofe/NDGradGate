@@ -12,6 +12,7 @@ namespace ND.GradGate.Kernel
         #region Constructor
         public Startup(IConfiguration configuration)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             _configuration = configuration;
 
         }
