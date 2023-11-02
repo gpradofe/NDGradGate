@@ -18,9 +18,9 @@ namespace ND.GradGate.Kernel.Domain.Contracts.Applicant
         public string CitizenshipCountry { get; set; }
         public string AreaOfStudy { get; set; }
         public string ApplicationStatus { get; set; }
-        public string DepartmentRecommendation { get; set; }
-        public List<AcademicHistoryDto> AcademicHistories { get; set; }
-        public List<FacultyAdvisorDto> FacultyAdvisors { get; set; }
-        public List<ReviewerDto> Reviewers { get; set; }
+        public string? DepartmentRecommendation { get; set; }
+        public List<AcademicHistoryDto>? AcademicHistories { get; set; }
+        public List<FacultyAdvisorDto>? FacultyAdvisors { get; set; }
+        public List<ReviewerDto>? Reviewers { get; set; }
     }
 }
