@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ND.GradGate.Kernel.Application.Applicants.Interfaces.Actions
 {
-    public interface ICreateApplicantInfoByIdAction
+    public interface ICreateApplicantInfoAction
     {
-        Task<ApplicantDto> CreateApplicantInfoAsync(ApplicantDto applicantDto);
+        Task<bool> CreateApplicantInfoAsync(ApplicantDto applicantDto);
 
     }
 }

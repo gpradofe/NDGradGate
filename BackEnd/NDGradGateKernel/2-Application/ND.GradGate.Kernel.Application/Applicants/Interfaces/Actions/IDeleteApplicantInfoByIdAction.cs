@@ -9,7 +9,7 @@ namespace ND.GradGate.Kernel.Application.Applicants.Interfaces.Actions
 {
     public interface IDeleteApplicantInfoByIdAction
     {
-        Task DeleteApplicantInfoAsync(int refId);
+        Task<bool> DeleteApplicantInfoAsync(int refId);
 
     }
 }

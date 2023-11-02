@@ -18,18 +18,24 @@ namespace ND.GradGate.Kernel.Application.Applicants
         private readonly IGetApplicantInfoByIdAction _getApplicantInfoByIdAction;
         private readonly IGetApplicantsInfoByNameAction _getApplicantsInfoByNameAction;
         private readonly IUpdateApplicantInfoByIdAction _updateApplicantInfoByIdAction;
-        private readonly ICreateApplicantInfoByIdAction _createApplicantInfoByIdAction;
+        private readonly ICreateApplicantInfoAction _createApplicantInfoByIdAction;
         private readonly IDeleteApplicantInfoByIdAction _deleteApplicantInfoByIdAction;
         #endregion
 
         #region Constructors
         public ApplicantApplication(ILogger<ApplicantApplication> logger,
                                     IGetApplicantInfoByIdAction getApplicantInfoByIdAction,
-                                    IGetApplicantsInfoByNameAction getApplicantsInfoByNameAction)
+                                    IGetApplicantsInfoByNameAction getApplicantsInfoByNameAction,
+                                    IUpdateApplicantInfoByIdAction updateApplicantInfoByIdAction,
+                                    IDeleteApplicantInfoByIdAction deleteApplicantInfoById,
+                                    ICreateApplicantInfoAction createApplicantInfoAction)
         {
             _logger = logger;
             _getApplicantInfoByIdAction = getApplicantInfoByIdAction;
             _getApplicantsInfoByNameAction = getApplicantsInfoByNameAction;
+            _createApplicantInfoByIdAction = createApplicantInfoAction;
+            _deleteApplicantInfoByIdAction = deleteApplicantInfoById;
+            _updateApplicantInfoByIdAction = updateApplicantInfoByIdAction;
         }
         #endregion
 
@@ -74,9 +80,15 @@ namespace ND.GradGate.Kernel.Application.Applicants
             {
                 _logger.LogInformation($"Update applicant data with RefID @{refId}.");
 
-                ApplicantDto applicant = await _updateApplicantInfoByIdAction.UpdateApplicantInfoAsync(refId, applicantDto);
+                var updatedApplicant = await _updateApplicantInfoByIdAction.UpdateApplicantInfoAsync(refId, applicantDto);
 
-                return applicant;
+                if (updatedApplicant == null)
+                {
+                    _logger.LogError($"Failed to update applicant with RefID {refId}.");
+                    // Optionally handle the failure case, such as throwing a custom exception or returning null
+                }
+
+                return updatedApplicant;
             }
             catch (Exception ex)
             {
@@ -85,15 +97,16 @@ namespace ND.GradGate.Kernel.Application.Applicants
             }
         }
 
-        public async Task<ApplicantDto> CreateApplicantInfoAsync(ApplicantDto applicantDto)
+
+        public async Task<bool> CreateApplicantInfoAsync(ApplicantDto applicantDto)
         {
             try
             {
                 _logger.LogInformation($"Create applicant data.");
 
-                ApplicantDto applicant = await _createApplicantInfoByIdAction.CreateApplicantInfoAsync(applicantDto);
+                bool ret = await _createApplicantInfoByIdAction.CreateApplicantInfoAsync(applicantDto);
 
-                return applicant;
+                return ret;
             }
             catch (Exception ex)
             {
@@ -102,18 +115,27 @@ namespace ND.GradGate.Kernel.Application.Applicants
             }
         }
 
-        public async Task DeleteApplicantInfoAsync(int refId)
+        public async Task<bool> DeleteApplicantInfoAsync(int refId)
         {
             try
             {
-                _logger.LogInformation($"Delete applicant data with RefID @{refId}.");
+                _logger.LogInformation($"Attempting to delete applicant data with RefID: {refId}.");
 
-                await _deleteApplicantInfoByIdAction.DeleteApplicantInfoAsync(refId);
+                var result = await _deleteApplicantInfoByIdAction.DeleteApplicantInfoAsync(refId);
+
+                if (!result)
+                {
+                    _logger.LogWarning($"Deletion of applicant with RefID: {refId} failed.");
+                    return false;
+                }
+
+                _logger.LogInformation($"Successfully deleted applicant data with RefID: {refId}.");
+                return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-                throw;
+                _logger.LogError(ex, $"An error occurred while attempting to delete applicant data with RefID: {refId}. Error: {ex.Message}");
+                return false;
             }
         }
         #endregion

@@ -12,39 +12,39 @@ using System.Threading.Tasks;
 
 namespace ND.GradGate.Kernel.Application.Applicants.Actions
 {
-    public class DeleteApplicantInfoByIdAction: IDeleteApplicantInfoByIdAction
+    public class DeleteApplicantInfoByIdAction : IDeleteApplicantInfoByIdAction
     {
-        #region Attributes
         private readonly ILogger<DeleteApplicantInfoByIdAction> _logger;
         private readonly IApplicantRepository _applicantRepository;
-        #endregion
 
-        #region Constructor
         public DeleteApplicantInfoByIdAction(ILogger<DeleteApplicantInfoByIdAction> logger,
-                                    IApplicantRepository applicantRepository)
+                                             IApplicantRepository applicantRepository)
         {
             _logger = logger;
             _applicantRepository = applicantRepository;
         }
-        #endregion
 
-        #region Methods
-        public async Task DeleteApplicantInfoAsync(int refId)
+        public async Task<bool> DeleteApplicantInfoAsync(int refId)
         {
             try
             {
-                _logger.LogInformation($"Deleting information for applicant with RefID {refId}");
+                _logger.LogInformation($"Attempting to delete information for applicant with RefID {refId}");
 
                 var applicantToDelete = await _applicantRepository.GetByApplicantIdAsync(refId);
+                if (applicantToDelete == null)
+                {
+                    _logger.LogWarning($"No applicant found with RefID {refId}. Cannot delete.");
+                    return false;
+                }
 
-                await _applicantRepository.DeleteAsync(applicantToDelete);
+                return await _applicantRepository.DeleteAsync(applicantToDelete);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-                throw;
+                _logger.LogError(ex, $"An error occurred while deleting applicant with RefID {refId}: {ex.Message}");
+                return false;
             }
         }
-        #endregion
     }
+
 }

@@ -17,5 +17,6 @@ namespace ND.GradGate.Kernel.DataAccess.Persistent.Repositories.Interfaces
         Task<T> UpdateAsync(T entity);
         Task<IList<T>> UpdateListAsync(IList<T> entities);
         Task<bool> DeleteAsync(T entity);
+        Task<T> SaveOrUpdateAsync(T entity, TId id);
     }
 }
