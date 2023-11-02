@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\4-Domain\ND.GradGate.Kernel.Domain\ND.GradGate.Kernel.Domain.csproj" />
+    <ProjectReference Include="..\Core\ND.GradGate.Kernel.DataAccess.Persistent\ND.GradGate.Kernel.DataAccess.Persistent.csproj" />
+  </ItemGroup>
+
+</Project>

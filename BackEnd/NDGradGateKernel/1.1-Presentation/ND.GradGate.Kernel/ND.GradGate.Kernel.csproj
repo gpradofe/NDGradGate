@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\2-Application\ND.GradGate.Kernel.Application\ND.GradGate.Kernel.Application.csproj" />
+    <ProjectReference Include="..\..\5.1-Infraestructure\ND.GradGate.Kernel.DataAccess\ND.GradGate.Kernel.DataAccess.csproj" />
+    <ProjectReference Include="..\Core\ND.GradGate.Kernel.Service.Core.APIBase\ND.GradGate.Kernel.Service.Core.APIBase.csproj" />
+  </ItemGroup>
+
+</Project>
