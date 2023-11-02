@@ -17,6 +17,7 @@ namespace ND.GradGate.Kernel.Application.Applicants
         private readonly ILogger<ApplicantApplication> _logger;
         private readonly IGetApplicantInfoByIdAction _getApplicantInfoByIdAction;
         private readonly IGetApplicantsInfoByNameAction _getApplicantsInfoByNameAction;
+        private readonly IGetAllApplicantsAction _getAllApplicantsAction;
         private readonly IUpdateApplicantInfoByIdAction _updateApplicantInfoByIdAction;
         private readonly ICreateApplicantInfoAction _createApplicantInfoByIdAction;
         private readonly IDeleteApplicantInfoByIdAction _deleteApplicantInfoByIdAction;
@@ -28,7 +29,8 @@ namespace ND.GradGate.Kernel.Application.Applicants
                                     IGetApplicantsInfoByNameAction getApplicantsInfoByNameAction,
                                     IUpdateApplicantInfoByIdAction updateApplicantInfoByIdAction,
                                     IDeleteApplicantInfoByIdAction deleteApplicantInfoById,
-                                    ICreateApplicantInfoAction createApplicantInfoAction)
+                                    ICreateApplicantInfoAction createApplicantInfoAction,
+                                    IGetAllApplicantsAction getAllApplicantsAction)
         {
             _logger = logger;
             _getApplicantInfoByIdAction = getApplicantInfoByIdAction;
@@ -36,6 +38,7 @@ namespace ND.GradGate.Kernel.Application.Applicants
             _createApplicantInfoByIdAction = createApplicantInfoAction;
             _deleteApplicantInfoByIdAction = deleteApplicantInfoById;
             _updateApplicantInfoByIdAction = updateApplicantInfoByIdAction;
+            _getAllApplicantsAction = getAllApplicantsAction;
         }
         #endregion
 
@@ -64,6 +67,22 @@ namespace ND.GradGate.Kernel.Application.Applicants
                 _logger.LogInformation($"Search for applicants with names matching: FirstName: {firstName}, LastName: {lastName}.");
 
                 List<ApplicantDto> applicants = await _getApplicantsInfoByNameAction.GetApplicantInfoAsync(firstName, lastName);
+
+                return applicants;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+        }
+        public async Task<List<ApplicantDto>> GetAllApplicantsAsync()
+        {
+            try
+            {
+                _logger.LogInformation($"Fetching all applicants");
+
+                List<ApplicantDto> applicants = await _getAllApplicantsAction.GetAllApplicantsAsync();
 
                 return applicants;
             }

@@ -13,21 +13,22 @@ import AdminDashboard from "./Components/Pages/AdminDashboard";
 
 function MainContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const location = useLocation(); // Now, this is inside the context of Router
+  const location = useLocation();
 
   const toggleSidebar = () => {
     console.log("Toggling sidebar");
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const showSidebar = location.pathname !== "/";
   const ContentContainer = styled.div`
-    margin-left: ${isSidebarOpen ? "250px" : "0"};
+    margin-left: ${showSidebar && isSidebarOpen ? "250px" : "0"};
     transition: margin-left 0.3s;
   `;
 
   return (
     <div className="App">
-      {location.pathname !== "/" && ( // Check the current pathname
+      {showSidebar && (
         <SideBar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       )}
       <ContentContainer>

@@ -1,3 +1,4 @@
+import { Form } from "react-bootstrap";
 import styled from "styled-components";
 
 export const LoginContainer = styled.div`
@@ -5,10 +6,11 @@ export const LoginContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f2f2f2; // Or any color of your choice
+  width: 100vw;
+  background-color: #f2f2f2;
 `;
 
-export const LoginForm = styled.form`
+export const StyledForm = styled(Form)`
   padding: 2rem;
   background: white;
   border-radius: 8px;

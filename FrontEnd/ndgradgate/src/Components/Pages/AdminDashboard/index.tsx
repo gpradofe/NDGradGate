@@ -26,7 +26,6 @@ const TableRow: React.FC<TableRowProps> = ({ app }) => (
   <tr>
     <td>{app.name}</td>
     <td>{app.status}</td>
-    {/* Add more cells as needed */}
   </tr>
 );
 interface Application {
@@ -42,17 +41,6 @@ interface Faculty {
   department: string;
 }
 
-const mockApplications: Application[] = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    status: "Under Review",
-    assignedTo: "Dr. Smith",
-  },
-  { id: 2, name: "Bob Brown", status: "Accepted", assignedTo: "Dr. Johnson" },
-  // Add more applications
-];
-
 const mockFaculty: Faculty[] = [
   { id: 1, name: "Dr. Smith", department: "Computer Science" },
   { id: 2, name: "Dr. Johnson", department: "Engineering" },
@@ -67,29 +55,37 @@ const AdminDashboard: React.FC = () => {
     key: null,
     direction: "ascending",
   });
-
-  const sortedApplications = useMemo(() => {
-    if (sortConfig.key === null) {
-      // If sort key is null, return the applications as is.
-      return [...mockApplications];
-    }
-
-    // Now TypeScript knows sortConfig.key is not null here
-    return [...mockApplications].sort((a, b) => {
-      // Safely assume sortConfig.key is a valid key of Application.
-      const aValue = a[sortConfig.key!];
-      const bValue = b[sortConfig.key!];
-
-      // You might want to handle non-string types here if your data can contain numbers or other types
-      if (aValue < bValue) {
-        return sortConfig.direction === "ascending" ? -1 : 1;
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const response = await fetch(
+          "https://localhost:5009/api/Applicant/GetAllApplicants",
+          {
+            headers: {
+              accept: "application/json",
+            },
+            mode: "no-cors",
+          }
+        );
+        console.log(response);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setApplications(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Fetching applications failed: ", error.message);
+        } else {
+          console.error(
+            "Fetching applications failed: An unknown error occurred"
+          );
+        }
       }
-      if (aValue > bValue) {
-        return sortConfig.direction === "ascending" ? 1 : -1;
-      }
-      return 0; // equal values
-    });
-  }, [mockApplications, sortConfig]);
+    };
+
+    fetchApplications();
+  }, []);
 
   const requestSort = (key: keyof Application) => {
     let direction: "ascending" | "descending" = "ascending";
@@ -100,22 +96,6 @@ const AdminDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    setApplications([
-      {
-        id: 1,
-        name: "Alice Johnson",
-        status: "Under Review",
-        assignedTo: "Dr. Smith",
-      },
-      {
-        id: 2,
-        name: "Bob Brown",
-        status: "Accepted",
-        assignedTo: "Dr. Johnson",
-      },
-      // ... more applications
-    ]);
-
     setFaculty([
       { id: 1, name: "Dr. Smith", department: "Computer Science" },
       { id: 2, name: "Dr. Johnson", department: "Engineering" },
@@ -150,7 +130,7 @@ const AdminDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedApplications.map((app) => (
+                  {applications.map((app) => (
                     <TableRow key={app.id} app={app} />
                   ))}
                 </tbody>
@@ -162,7 +142,7 @@ const AdminDashboard: React.FC = () => {
           <Col md={6}>
             <Section>
               <Header>Assign Applications</Header>
-              {mockApplications.map((app) => (
+              {applications.map((app) => (
                 <AssignmentForm key={app.id}>
                   <span>{app.name}</span>
                   <Form.Select defaultValue={app.assignedTo}>
@@ -201,7 +181,7 @@ const AdminDashboard: React.FC = () => {
         <Col md={12}>
           <Section>
             <Header>Manage Applications</Header>
-            {mockApplications.map((app) => (
+            {applications.map((app) => (
               <ApplicationRow key={app.id}>
                 <span>{app.name}</span>
                 <div>

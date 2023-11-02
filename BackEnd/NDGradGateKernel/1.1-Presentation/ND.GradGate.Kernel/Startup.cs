@@ -67,7 +67,7 @@ namespace ND.GradGate.Kernel
                 app.UseDeveloperExceptionPage();
             }
             app.UseHealthChecks("/healthycheck");
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.AddSwaggers(provider);
             app.UseAuthorization();
