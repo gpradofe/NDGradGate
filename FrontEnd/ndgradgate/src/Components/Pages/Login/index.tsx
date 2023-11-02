@@ -1,27 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import { LoginContainer, LoginForm } from "./styles";
 
 const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [popup, setPopup] = useState<Window | null>(null);
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSSOLogin = () => {
+    const ssoUrl =
+      "https://okta.nd.edu/app/zoomus/exk114raeoSv6qgBc357/sso/saml?SAMLRequest=fZJba8IwFMff9ylK3ntJvC7Yis7JBIfF1g32MmJ71GKb1Jy0jH361RtzDHw8kP%2FvXH4ZDL%2BK3KpBY6akT6jjEQtkotJMbn2yiqd2nwyDhwGKImclH1VmJ5dwqACNNUIEbZrck5JYFaAj0HWWwGo598nOmBK560plNKSiAOdbqcKp0D2i3ChaEGvSUDIpzKn1NaD2RjgydSCtXFGW7jHWpOBrT2lbC1BR3T1sx0mr03MR1QlHrKnSCZym88lG5AjEmk188v48%2FvSSzSbtU9FiKfUopd3Hbq8DgvXa7XWPUmEneQbSNAEMBWJWwy8CsYKZRCOk8QnzWMum1PZoTDucMU49p9%2F3PogVamVUovJxJs%2BHq7TkSmCGXDarIzcJj0avc84cj6%2FPj5C%2FxHFoh4soJtbbVQA7CmiUSOTnk99nlZfGJDgb4qeJ9S3hPkBcHZLgn6mBe8sMLuXfTxD8AA%3D%3D&_x_zm_rtaid=OcYLC3CMSgCzEbtmW4U6AQ.1698852130873"; // Your SSO URL here. // Replace with the actual URL
+    const newPopup = window.open(ssoUrl, "_blank", "width=500,height=600");
+    setPopup(newPopup);
+
+    if (!newPopup) {
+      console.error(
+        "Failed to open the SSO window. Possibly blocked by a popup blocker."
+      );
+      return;
+    }
+  };
+
+  const checkPopup = () => {
+    const check = setInterval(() => {
+      if (!popup || popup.closed) {
+        clearInterval(check);
+        console.log("Popup closed by user");
+        // Here, ideally, check if the authentication was successful
+        // For now, just sending the message
+        window.postMessage("SSO_SUCCESS", window.location.origin);
+      }
+    }, 500);
+  };
+
+  checkPopup();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (email.endsWith("@nd.edu")) {
+      handleSSOLogin();
+    } else {
+      console.log("Non-ND email detected");
+    }
+  };
+
   return (
-    <LoginContainer>
-      <LoginForm>
-        <h2 className="text-center mb-4">NDGradGate Login</h2>
+    <div>
+      <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={handleEmailChange}
+          />
         </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" />
-        </Form.Group>
-
         <Button variant="primary" type="submit">
           Sign In
         </Button>
-      </LoginForm>
-    </LoginContainer>
+      </Form>
+    </div>
   );
 };
 
