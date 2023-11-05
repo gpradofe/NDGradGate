@@ -31,6 +31,7 @@ namespace ND.GradGate.Kernel.Application.Applicants
                                     IDeleteApplicantInfoByIdAction deleteApplicantInfoById,
                                     ICreateApplicantInfoAction createApplicantInfoAction,
                                     IGetAllApplicantsAction getAllApplicantsAction)
+                                    ICreateApplicantInfoAction createApplicantInfoAction)
         {
             _logger = logger;
             _getApplicantInfoByIdAction = getApplicantInfoByIdAction;
