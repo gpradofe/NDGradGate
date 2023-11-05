@@ -6,6 +6,12 @@ import {
   useLocation,
 } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primeicons/primeicons.css";
+import "primereact/resources/primereact.css";
+import "primeflex/primeflex.css"; // css utility
+import "primereact/resources/primereact.min.css";
+
 import styled from "styled-components";
 import SideBar from "./Components/Organisms/SideBar";
 import LoginPage from "./Components/Pages/Login";
