@@ -4,7 +4,7 @@ import { Faculty } from "../types/Application/Faculty";
 
 class ApiService {
   private baseURL: string =
-    "http://ndgradgatekernel-dev.us-east-1.elasticbeanstalk.com/api/"; // Replace with your actual base URL
+    "https://ndgradgatekernel-dev.us-east-1.elasticbeanstalk.com/api/"; // Replace with your actual base URL
 
   public async fetchApplications(): Promise<Applicant[]> {
     try {
