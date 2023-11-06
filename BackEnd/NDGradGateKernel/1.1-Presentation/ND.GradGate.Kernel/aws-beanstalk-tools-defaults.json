@@ -1,0 +1,20 @@
+
+{
+    "region" : "us-east-1",
+    "configuration" : "Release",
+    "framework"     : "net6.0",
+    "self-contained" : false,
+    "application"    : "NDGradGateKernel",
+    "environment"    : "NDGradGateKernel-dev",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-074db8366e45edc3b\";\"aws:ec2:vpc,Subnets\"=\"subnet-096924756daa74ec6\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.6.1 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "ndgradgatekernel-dev",
+    "instance-type"        : "t3a.small",
+    "key-pair"             : "ndgradgate",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role",
+    "proxy-server"         : "nginx"
+}

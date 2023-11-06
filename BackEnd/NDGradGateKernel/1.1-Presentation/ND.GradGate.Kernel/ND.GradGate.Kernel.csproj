@@ -4,7 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<AWSProjectType>Lambda</AWSProjectType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="8.1.0" />
+    <PackageReference Include="AWSSDK.Amplify" Version="3.7.201.1" />
+    <PackageReference Include="AWSSDK.AmplifyBackend" Version="3.7.201.48" />
+    <PackageReference Include="AWSSDK.AmplifyUIBuilder" Version="3.7.202.19" />
+    <PackageReference Include="AWSSDK.Lambda" Version="3.7.202.10" />
+  </ItemGroup>
 
 
   <ItemGroup>
