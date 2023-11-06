@@ -3,7 +3,8 @@ import { Applicant } from "../types/Application/Applicant";
 import { Faculty } from "../types/Application/Faculty";
 
 class ApiService {
-  private baseURL: string = "https://localhost:5009/api/"; // Replace with your actual base URL
+  private baseURL: string =
+    "http://ndgradgatekernel-dev.us-east-1.elasticbeanstalk.com/api/"; // Replace with your actual base URL
 
   public async fetchApplications(): Promise<Applicant[]> {
     try {
@@ -24,7 +25,6 @@ class ApiService {
     const mockFaculty: Faculty[] = [
       { id: 1, name: "Dr. Smith", department: "Computer Science" },
       { id: 2, name: "Dr. Johnson", department: "Engineering" },
-      // ... more faculty members
     ];
     console.log("Faculty loaded:", mockFaculty);
     return mockFaculty;
