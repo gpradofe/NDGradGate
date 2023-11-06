@@ -70,7 +70,6 @@ namespace ND.GradGate.Kernel.Controllers
                 throw ex;
             }
         }
-
         [HttpGet("GetApplicantsByName")]
         public async Task<IActionResult> GetApplicantsByNameAsync([FromQuery] string? firstName, [FromQuery] string? lastName)
         {
