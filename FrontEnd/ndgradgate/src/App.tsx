@@ -16,6 +16,10 @@ import styled from "styled-components";
 import SideBar from "./Components/Organisms/SideBar";
 import LoginPage from "./Components/Pages/Login";
 import AdminDashboard from "./Components/Pages/AdminDashboard";
+import ProfessorDashboard from "./Components/Pages/ProfessorDashboard";
+import ReviewerDashboard from "./Components/Pages/ReviewerDashboard.py";
+
+
 
 function MainContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -41,6 +45,8 @@ function MainContent() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/adminDashboard" element={<AdminDashboard />} />
+          <Route path="/professorDashboard" element={<ProfessorDashboard />} />
+          <Route path="/reviewerDashboard" element={<ReviewerDashboard />} />
         </Routes>
       </ContentContainer>
     </div>
