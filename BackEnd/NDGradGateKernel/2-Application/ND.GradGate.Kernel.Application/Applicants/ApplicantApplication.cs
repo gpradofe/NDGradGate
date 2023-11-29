@@ -29,8 +29,7 @@ namespace ND.GradGate.Kernel.Application.Applicants
                                     IGetApplicantsInfoByNameAction getApplicantsInfoByNameAction,
                                     IUpdateApplicantInfoByIdAction updateApplicantInfoByIdAction,
                                     IDeleteApplicantInfoByIdAction deleteApplicantInfoById,
-                                    ICreateApplicantInfoAction createApplicantInfoAction,
-                                    IGetAllApplicantsAction getAllApplicantsAction)
+                                    IGetAllApplicantsAction getAllApplicantsAction,
                                     ICreateApplicantInfoAction createApplicantInfoAction)
         {
             _logger = logger;
