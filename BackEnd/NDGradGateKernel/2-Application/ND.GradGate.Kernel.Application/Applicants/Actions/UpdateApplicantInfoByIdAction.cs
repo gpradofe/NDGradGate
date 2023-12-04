@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using ND.GradGate.Kernel.Application.Applicants.Interfaces.Actions;
 using ND.GradGate.Kernel.DataAccess.Repositories.Interfaces;
+using ND.GradGate.Kernel.Domain.ApplicantData;
 using ND.GradGate.Kernel.Domain.Contracts.Applicant;
 using System.Reflection;
 using System.Runtime.Intrinsics.Arm;

@@ -1,231 +1,99 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Container, Row, Col, Form } from "react-bootstrap";
-import {
-  ApplicationRow,
-  AssignmentForm,
-  DashboardContainer,
-  ExportButton,
-  FacultyList,
-  Header,
-  SearchInput,
-  Section,
-  StyledButton,
-  Table,
-} from "./styles";
-import { CSVLink } from "react-csv";
-
-type SortConfig = {
-  key: keyof Application | null;
-  direction: "ascending" | "descending";
-};
-interface TableRowProps {
-  app: Application;
-}
-
-const TableRow: React.FC<TableRowProps> = ({ app }) => (
-  <tr>
-    <td>{app.name}</td>
-    <td>{app.status}</td>
-    {/* Add more cells as needed */}
-  </tr>
-);
-interface Application {
-  id: number;
-  name: string;
-  status: string;
-  assignedTo: string;
-}
-
-interface Faculty {
-  id: number;
-  name: string;
-  department: string;
-}
-
-const mockApplications: Application[] = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    status: "Under Review",
-    assignedTo: "Dr. Smith",
-  },
-  { id: 2, name: "Bob Brown", status: "Accepted", assignedTo: "Dr. Johnson" },
-  // Add more applications
-];
-
-const mockFaculty: Faculty[] = [
-  { id: 1, name: "Dr. Smith", department: "Computer Science" },
-  { id: 2, name: "Dr. Johnson", department: "Engineering" },
-  // Add more faculty members
-];
-
+import { DataTable } from "primereact/datatable";
+import { Button } from "primereact/button";
+import { Tooltip } from "primereact/tooltip";
+import { Column } from "primereact/column";
+import apiServiceInstance from "../../../services/ApiService";
+import React, { useEffect, useRef, useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { DashboardContainer, FacultyList, Header, Section } from "./styles";
+import { Applicant } from "../../../types/Application/Applicant";
+import { Faculty } from "../../../types/Application/Faculty";
+import DataGrid from "../../Atoms/DataGrid";
+import { Toast } from "primereact/toast";
 const AdminDashboard: React.FC = () => {
-  const [applications, setApplications] = useState<Application[]>([]);
+  const [applications, setApplications] = useState<Applicant[]>([]);
+  const [filteredApplications, setFilteredApplications] = useState<Applicant[]>(
+    []
+  );
+  const [globalFilter, setGlobalFilter] = useState("");
   const [faculty, setFaculty] = useState<Faculty[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [sortConfig, setSortConfig] = useState<SortConfig>({
-    key: null,
-    direction: "ascending",
+  const [visibleColumns, setVisibleColumns] = useState<{
+    [key: string]: boolean;
+  }>({
+    FirstName: true,
+    LastName: true,
+    Email: true,
+    ApplicationStatus: true,
+    AreaOfStudy: true,
+    CitizenshipCountry: true,
+    DepartmentRecommendation: false,
+    Ethnicity: true,
+    Sex: true,
+    AcademicHistories: false,
   });
+  const toast = useRef<Toast>(null);
 
-  const sortedApplications = useMemo(() => {
-    if (sortConfig.key === null) {
-      // If sort key is null, return the applications as is.
-      return [...mockApplications];
-    }
-
-    // Now TypeScript knows sortConfig.key is not null here
-    return [...mockApplications].sort((a, b) => {
-      // Safely assume sortConfig.key is a valid key of Application.
-      const aValue = a[sortConfig.key!];
-      const bValue = b[sortConfig.key!];
-
-      // You might want to handle non-string types here if your data can contain numbers or other types
-      if (aValue < bValue) {
-        return sortConfig.direction === "ascending" ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return sortConfig.direction === "ascending" ? 1 : -1;
-      }
-      return 0; // equal values
+  const showSuccess = (message: string) => {
+    toast.current?.show({
+      severity: "success",
+      summary: "Success",
+      detail: message,
+      life: 3000,
     });
-  }, [mockApplications, sortConfig]);
-
-  const requestSort = (key: keyof Application) => {
-    let direction: "ascending" | "descending" = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
-    }
-    setSortConfig({ key, direction });
   };
 
   useEffect(() => {
-    setApplications([
-      {
-        id: 1,
-        name: "Alice Johnson",
-        status: "Under Review",
-        assignedTo: "Dr. Smith",
-      },
-      {
-        id: 2,
-        name: "Bob Brown",
-        status: "Accepted",
-        assignedTo: "Dr. Johnson",
-      },
-      // ... more applications
-    ]);
-
-    setFaculty([
-      { id: 1, name: "Dr. Smith", department: "Computer Science" },
-      { id: 2, name: "Dr. Johnson", department: "Engineering" },
-      // ... more faculty members
-    ]);
+    apiServiceInstance
+      .fetchApplications()
+      .then((response) => {
+        setApplications(response);
+        setFilteredApplications(response);
+      })
+      .catch((error) => console.error("Error fetching applications:", error));
   }, []);
-
-  const handleAssignment = (appId: number, facultyName: string) => {
-    // TODO: Implement assignment logic
+  const assignReviewer = (applicationRef: number, reviewerId: number) => {
+    console.log(
+      `Assign reviewer ${reviewerId} to application ${applicationRef}`
+    );
   };
 
-  const handleApplicationStatusChange = (appId: number, status: string) => {
-    // TODO: Implement status change logic
+  const updateApplicationStatus = (applicationRef: number, status: string) => {
+    console.log(`Update application ${applicationRef} status to ${status}`);
   };
-
-  const filteredFaculty = faculty.filter((f) =>
-    f.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  const facultyOptions = faculty.map((fac) => ({
+    label: fac.name,
+    value: fac.id,
+  }));
+  useEffect(() => {
+    apiServiceInstance
+      .fetchFaculty()
+      .then((response) => {
+        setFaculty(response); // Make sure the API returns the data in `response.data`
+      })
+      .catch((error) => console.error("Error fetching faculty:", error));
+  }, []);
   return (
     <DashboardContainer>
+      <Toast ref={toast} />
       <Container fluid>
         <Row>
           <Col md={12}>
             <Section>
               <Header>Application Overview</Header>
-              <Table>
-                <thead>
-                  <tr>
-                    <th onClick={() => requestSort("name")}>Name</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {sortedApplications.map((app) => (
-                    <TableRow key={app.id} app={app} />
-                  ))}
-                </tbody>
-              </Table>
-            </Section>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6}>
-            <Section>
-              <Header>Assign Applications</Header>
-              {mockApplications.map((app) => (
-                <AssignmentForm key={app.id}>
-                  <span>{app.name}</span>
-                  <Form.Select defaultValue={app.assignedTo}>
-                    {mockFaculty.map((faculty) => (
-                      <option key={faculty.id} value={faculty.name}>
-                        {faculty.name}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <StyledButton variant="primary">Assign</StyledButton>
-                </AssignmentForm>
-              ))}
-            </Section>
-          </Col>
-
-          <Col md={6}>
-            <Section>
-              <Header>Committee Composition</Header>
-              <SearchInput
-                type="text"
-                placeholder="Search faculty..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+              <DataGrid
+                data={filteredApplications}
+                globalFilter={globalFilter}
+                onGlobalFilterChange={(e) => setGlobalFilter(e.target.value)}
+                onAssignReviewer={assignReviewer}
+                onUpdateApplicationStatus={updateApplicationStatus}
+                facultyOptions={facultyOptions}
+                visibleColumns={visibleColumns}
+                setVisibleColumns={setVisibleColumns}
+                showSuccess={showSuccess} // Pass the showSuccess function to the DataGrid
               />
-              <FacultyList>
-                {filteredFaculty.map((member) => (
-                  <li key={member.id}>
-                    {member.name} ({member.department})
-                  </li>
-                ))}
-              </FacultyList>
             </Section>
           </Col>
         </Row>
-
-        <Col md={12}>
-          <Section>
-            <Header>Manage Applications</Header>
-            {mockApplications.map((app) => (
-              <ApplicationRow key={app.id}>
-                <span>{app.name}</span>
-                <div>
-                  <StyledButton variant="success">Accept</StyledButton>
-                  <StyledButton variant="warning">Hold</StyledButton>
-                  <StyledButton variant="danger">Reject</StyledButton>
-                </div>
-              </ApplicationRow>
-            ))}
-          </Section>
-        </Col>
-
-        <Col md={12}>
-          <Section>
-            <Header>Data Export</Header>
-            <CSVLink
-              data={applications}
-              filename={"applications.csv"}
-              className="btn btn-primary"
-            >
-              Export to CSV
-            </CSVLink>
-          </Section>
-        </Col>
       </Container>
     </DashboardContainer>
   );

@@ -45,7 +45,31 @@ namespace ND.GradGate.Kernel.Controllers
                 throw ex;
             }
         }
+        [HttpGet("GetAllApplicants")]
 
+        public async Task<IActionResult> GetAllApplicants()
+        {
+            try
+            {
+                
+                    _logger.LogInformation($"Getting all applicants");
+
+                    List<ApplicantDto> applicants = await _applicantApplication.GetAllApplicantsAsync();
+                    if (applicants != null)
+                    {
+                        return Ok(applicants);
+                    }
+                    else
+                    {
+                        return NoContent();
+                    }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error on GetApplicantById");
+                throw ex;
+            }
+        }
         [HttpGet("GetApplicantsByName")]
         public async Task<IActionResult> GetApplicantsByNameAsync([FromQuery] string? firstName, [FromQuery] string? lastName)
         {

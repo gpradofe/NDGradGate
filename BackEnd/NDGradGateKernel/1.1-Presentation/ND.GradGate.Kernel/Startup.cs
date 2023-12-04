@@ -66,6 +66,11 @@ namespace ND.GradGate.Kernel
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials());
             app.UseHealthChecks("/healthycheck");
             app.UseHttpsRedirection();
             app.UseRouting();
@@ -75,11 +80,7 @@ namespace ND.GradGate.Kernel
             {
                 endpoints.MapControllers();
             });
-            app.UseCors(x => x
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true)
-                .AllowCredentials());
+
         }
         #endregion
 

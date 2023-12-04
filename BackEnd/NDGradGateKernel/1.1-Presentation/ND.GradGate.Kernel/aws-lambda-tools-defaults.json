@@ -1,0 +1,21 @@
+
+{
+    "region" : "us-east-1",
+    "profile" : "Gustavo-AdministratorAccess-565088413262",
+    "configuration" : "Release",
+    "framework"     : "net6.0",
+    "function-name" : "NDGradGateKernel",
+    "function-description" : "",
+    "package-type"         : "Zip",
+    "function-handler"     : "LambdaEntryPoint",
+    "function-memory-size" : 256,
+    "function-role"        : "arn:aws:iam::565088413262:role/lambda_exec_NDGradGateKernel",
+    "function-timeout"     : 10,
+    "function-runtime"     : "dotnet6",
+    "function-architecture" : "x86_64",
+    "function-subnets"      : "",
+    "function-security-groups" : "",
+    "tracing-mode"             : "PassThrough",
+    "environment-variables"    : "",
+    "image-tag"                : ""
+}
