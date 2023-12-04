@@ -9,17 +9,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.css";
-import "primeflex/primeflex.css"; // css utility
+import "primeflex/primeflex.css";
 import "primereact/resources/primereact.min.css";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 import styled from "styled-components";
 import SideBar from "./Components/Organisms/SideBar";
 import LoginPage from "./Components/Pages/Login";
-import AdminDashboard from "./Components/Pages/AdminDashboard";
 import ProfessorDashboard from "./Components/Pages/ProfessorDashboard";
 import ReviewerDashboard from "./Components/Pages/ReviewerDashboard.py";
-
-
+import ApplicantOverview from "./Components/Pages/ApplicantOverview/AdminDashboard";
+import AdminDashboard from "./Components/Pages/AdminDashboard";
 
 function MainContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -44,9 +47,10 @@ function MainContent() {
       <ContentContainer>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/adminDashboard" element={<AdminDashboard />} />
+          <Route path="/ApplicantOverview" element={<ApplicantOverview />} />
           <Route path="/professorDashboard" element={<ProfessorDashboard />} />
           <Route path="/reviewerDashboard" element={<ReviewerDashboard />} />
+          <Route path="/adminDashboard" element={<AdminDashboard />} />
         </Routes>
       </ContentContainer>
     </div>

@@ -25,7 +25,15 @@ const SideBar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({
         <NavList>
           <NavItem>
             <StyledNavLink
-              to="/adminDashboard"
+              to="/applicantoverview"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              Applicant Overview
+            </StyledNavLink>
+          </NavItem>
+          <NavItem>
+            <StyledNavLink
+              to="/AdminDashboard"
               className={({ isActive }) => (isActive ? "active" : "")}
             >
               Admin Dashboard

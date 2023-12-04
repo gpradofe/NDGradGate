@@ -24,7 +24,6 @@ interface TableRowProps {
 
 const TableRow: React.FC<TableRowProps> = ({ app }) => (
   <tr>
-    <td>{app.name}</td>
     <td>{app.status}</td>
     {/* Add more cells as needed */}
   </tr>
@@ -140,49 +139,49 @@ const ReviewerDashboard: React.FC = () => {
   return (
     <DashboardContainer>
       <Container fluid>
-       <Row>
-        <Col md={12}>
-          <Section>
-            <Header>Reviewer Dashboard: Managing Applications</Header>
-            <div className="container-fluid">
-              <table className="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Application Name</th>
-                    <th>Area of Interest</th>
-                    <th>Additional Info</th>
-                    <th>Potential Professor</th>
-                    <th>Recomendation</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mockApplications.map((app) => (
-                    <tr key={app.id}>
-                      <td>{app.name}</td>
-                      <td>Data Mining</td>
-                      <td>Add other needed info</td>
-                      <td>
-                        <select>
-                          <option value="none">None</option>
-                          <option value="prof1">Prof 1</option>
-                          <option value="prof2">Prof 2</option>
-                        </select>
-                      </td>
-                      <td>
-                        <select>
-                          <option value="interview">Interview</option>
-                          <option value="probreject">Probable Reject</option>
-                          <option value="moreoptions">More Options</option>
-                        </select>
-                      </td>
+        <Row>
+          <Col md={12}>
+            <Section>
+              <Header>Reviewer Dashboard: Managing Applications</Header>
+              <div className="container-fluid">
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Application Name</th>
+                      <th>Area of Interest</th>
+                      <th>Additional Info</th>
+                      <th>Potential Professor</th>
+                      <th>Recomendation</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Section>
-        </Col>
-      </Row>
+                  </thead>
+                  <tbody>
+                    {mockApplications.map((app) => (
+                      <tr key={app.id}>
+                        <td>{app.name}</td>
+                        <td>Data Mining</td>
+                        <td>Add other needed info</td>
+                        <td>
+                          <select>
+                            <option value="none">None</option>
+                            <option value="prof1">Prof 1</option>
+                            <option value="prof2">Prof 2</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select>
+                            <option value="interview">Interview</option>
+                            <option value="probreject">Probable Reject</option>
+                            <option value="moreoptions">More Options</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Section>
+          </Col>
+        </Row>
       </Container>
     </DashboardContainer>
   );

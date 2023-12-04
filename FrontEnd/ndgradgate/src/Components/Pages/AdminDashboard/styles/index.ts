@@ -19,26 +19,6 @@ export const Header = styled.h2`
   margin-bottom: 25px;
   font-size: 24px;
 `;
-export const MainContent = styled.div`
-  flex-grow: 1;
-  padding: 20px;
-  background: #f8f9fa;
-`;
-
-export const Table = styled(BSTable)`
-  th {
-    background-color: #5c7cfa;
-    color: white;
-  }
-
-  thead th {
-    border-top: none;
-  }
-
-  tbody tr:hover {
-    background-color: #f2f2f2;
-  }
-`;
 
 export const ApplicationRow = styled.div`
   display: flex;
@@ -113,4 +93,3 @@ export const FacultyList = styled.ul`
 export const SearchInput = styled(Form.Control)`
   margin-bottom: 15px;
 `;
-
