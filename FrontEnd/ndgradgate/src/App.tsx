@@ -19,11 +19,11 @@ import "@fontsource/roboto/700.css";
 import styled from "styled-components";
 import SideBar from "./Components/Organisms/SideBar";
 import LoginPage from "./Components/Pages/Login";
-import ProfessorDashboard from "./Components/Pages/ProfessorDashboard";
-import ReviewerDashboard from "./Components/Pages/ReviewerDashboard.py";
 import ApplicantOverview from "./Components/Pages/ApplicantOverview/AdminDashboard";
 import AdminDashboard from "./Components/Pages/AdminDashboard";
 import ReviewerOverviewPage from "./Components/Pages/ReviewerDashboard.py";
+import FacultyDashboard from "./Components/Pages/ProfessorDashboard";
+import AnalyticsDashboard from "./Components/Pages/AnalyticsDashboard";
 
 function MainContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -49,9 +49,10 @@ function MainContent() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/ApplicantOverview" element={<ApplicantOverview />} />
-          <Route path="/professorDashboard" element={<ProfessorDashboard />} />
+          <Route path="/facultyDashboard" element={<FacultyDashboard />} />
           <Route path="/reviewerDashboard" element={<ReviewerOverviewPage />} />
           <Route path="/adminDashboard" element={<AdminDashboard />} />
+          <Route path="/analyticsDashboard" element={<AnalyticsDashboard />} />
         </Routes>
       </ContentContainer>
     </div>

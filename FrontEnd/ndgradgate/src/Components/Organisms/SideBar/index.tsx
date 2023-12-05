@@ -47,6 +47,22 @@ const SideBar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({
               Reviewer Dashboard
             </StyledNavLink>
           </NavItem>
+          <NavItem>
+            <StyledNavLink
+              to="/facultyDashboard"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              Professor Dashboard
+            </StyledNavLink>
+          </NavItem>
+          <NavItem>
+            <StyledNavLink
+              to="/analyticsDashboard"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              Analytics
+            </StyledNavLink>
+          </NavItem>
           <NavItem></NavItem>
         </NavList>
       </SideBarContainer>

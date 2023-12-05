@@ -19,3 +19,10 @@ export const Header = styled.h2`
   margin-bottom: 25px;
   font-size: 24px;
 `;
+export const ChartContainer = styled.div`
+  margin-bottom: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+`;
