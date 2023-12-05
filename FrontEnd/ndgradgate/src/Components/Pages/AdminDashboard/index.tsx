@@ -31,12 +31,10 @@ interface Reviewer {
 // Mock Data
 const initialFacultyData: Faculty[] = [
   { id: 1, name: "John Doe", department: "Computer Science" },
-  // ... more data
 ];
 
 const initialReviewerData: Reviewer[] = [
   { id: 1, name: "Jane Smith", subject: "Mathematics" },
-  // ... more data
 ];
 
 // Helper component for TabPanel
@@ -71,36 +69,34 @@ const AdminDashboard: React.FC = () => {
     useState<Reviewer[]>(initialReviewerData);
   const [tempEntries, setTempEntries] = useState<(Faculty | Reviewer)[]>([]);
   const [isChanged, setIsChanged] = useState(false);
+  const [originalFacultyData, setOriginalFacultyData] = useState<Faculty[]>([
+    ...initialFacultyData,
+  ]);
+  const [originalReviewerData, setOriginalReviewerData] = useState<Reviewer[]>([
+    ...initialReviewerData,
+  ]);
 
-  // Function to handle field changes in the main table
-  const onFacultyRowEditComplete = (e: any) => {
-    let updatedFaculties = [...facultyData];
-    let { newData, index } = e;
-    updatedFaculties[index] = newData as Faculty;
-
-    setFacultyData(updatedFaculties);
-    setIsChanged(true);
+  // Check if data has been changed
+  const checkForChanges = () => {
+    const facultyChanged =
+      JSON.stringify(facultyData) !== JSON.stringify(originalFacultyData);
+    const reviewerChanged =
+      JSON.stringify(reviewerData) !== JSON.stringify(originalReviewerData);
+    setIsChanged(facultyChanged || reviewerChanged);
   };
 
-  // Function to handle field changes in the Reviewer table
-  const onReviewerRowEditComplete = (e: any) => {
-    let updatedReviewers = [...reviewerData];
-    let { newData, index } = e;
-    updatedReviewers[index] = newData as Reviewer;
-
-    setReviewerData(updatedReviewers);
-    setIsChanged(true);
-  };
   const saveChanges = () => {
-    // Here you would usually send data to the server
-    setIsChanged(false); // Reset change tracking
+    setOriginalFacultyData([...facultyData]);
+    setOriginalReviewerData([...reviewerData]);
+    setIsChanged(false);
   };
+
   const revertChanges = () => {
-    // Revert to initial data (or from the server)
-    setFacultyData(initialFacultyData);
-    setReviewerData(initialReviewerData);
-    setIsChanged(false); // Reset change tracking
+    setFacultyData([...originalFacultyData]);
+    setReviewerData([...originalReviewerData]);
+    setIsChanged(false);
   };
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
   };
@@ -150,13 +146,19 @@ const AdminDashboard: React.FC = () => {
     }
     setNewEntry({ name: "", department: "" }); // Reset form after adding
   };
-
+  const onTempEditComplete = (e: any, index: number) => {
+    let { rowData, newValue, field } = e;
+    const updatedTempEntries = [...tempEntries];
+    updatedTempEntries[index] = { ...rowData, [field]: newValue };
+    setTempEntries(updatedTempEntries);
+  };
   const deleteRow = (rowData: Faculty | Reviewer) => {
     if (tabIndex === 0) {
       setFacultyData(facultyData.filter((f) => f.id !== rowData.id));
     } else {
       setReviewerData(reviewerData.filter((r) => r.id !== rowData.id));
     }
+    checkForChanges();
   };
 
   const actionBodyTemplate = (rowData: any) => {
@@ -177,44 +179,27 @@ const AdminDashboard: React.FC = () => {
       </StyledButton>
     );
   };
-  const onCellEditComplete = (
-    e: any,
-    dataSetter: React.Dispatch<React.SetStateAction<Faculty[] | Reviewer[]>>
-  ) => {
-    let {
-      rowData,
-      field,
-      originalEvent: {
-        target: { value },
-      },
-    } = e;
-    dataSetter((prevData) =>
-      prevData.map((dataItem) =>
-        dataItem.id === rowData.id ? { ...rowData, [field]: value } : dataItem
-      )
-    );
-    setIsChanged(true);
-  };
 
-  const textEditor = <T,>(
-    props: any,
-    field: string,
-    dataSetter: React.Dispatch<React.SetStateAction<T[]>>
-  ) => {
-    return (
-      <InputText
-        type="text"
-        value={props.rowData[field]}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          const updatedData = props.value.map((item: T, index: number) =>
-            index === props.rowIndex
-              ? { ...item, [field]: e.target.value }
-              : item
-          );
-          dataSetter(updatedData);
-        }}
-      />
-    );
+  const textEditor = (options: any) => (
+    <InputText
+      type="text"
+      value={options.value}
+      onChange={(e) => options.editorCallback(e.target.value)}
+    />
+  );
+  const onFacultyRowEditComplete = (e: any) => {
+    let { newData, index } = e;
+    let updatedFaculties = [...facultyData];
+    updatedFaculties[index] = newData;
+    setFacultyData(updatedFaculties);
+    checkForChanges();
+  };
+  const onReviewerRowEditComplete = (e: any) => {
+    let { newData, index } = e;
+    let updatedReviewers = [...reviewerData];
+    updatedReviewers[index] = newData;
+    setReviewerData(updatedReviewers);
+    checkForChanges();
   };
   return (
     <DashboardContainer>
@@ -231,21 +216,21 @@ const AdminDashboard: React.FC = () => {
 
         <TabPanel value={tabIndex} index={0}>
           <h3>Faculty Management</h3>
-          <DataTable value={facultyData} editMode="cell">
+          <DataTable
+            value={facultyData}
+            editMode="row"
+            onRowEditComplete={onFacultyRowEditComplete}
+            dataKey="id"
+          >
             <Column field="id" header="ID" />
-            <Column
-              field="name"
-              header="Name"
-              editor={(props) => textEditor(props, "name", setFacultyData)}
-            />
+            <Column field="name" header="Name" editor={textEditor} />
             <Column
               field="department"
               header="Department"
-              editor={(props) =>
-                textEditor(props, "department", setFacultyData)
-              }
+              editor={textEditor}
             />
             <Column body={actionBodyTemplate} />
+            <Column rowEditor />
           </DataTable>
           <StyledButton variant="primary" onClick={openNewDialog}>
             Add New Faculty
@@ -254,18 +239,16 @@ const AdminDashboard: React.FC = () => {
 
         <TabPanel value={tabIndex} index={1}>
           <h3>Reviewer Management</h3>
-          <DataTable value={reviewerData} editMode="cell">
+          <DataTable
+            value={reviewerData}
+            editMode="row"
+            onRowEditComplete={onReviewerRowEditComplete}
+            dataKey="id"
+          >
             <Column field="id" header="ID" />
-            <Column
-              field="name"
-              header="Name"
-              editor={(props) => textEditor(props, "name", setReviewerData)}
-            />
-            <Column
-              field="subject"
-              header="Subject"
-              editor={(props) => textEditor(props, "subject", setReviewerData)}
-            />
+            <Column field="name" header="Name" editor={textEditor} />
+            <Column field="subject" header="Subject" editor={textEditor} />
+            <Column rowEditor />
             <Column body={actionBodyTemplate} />
           </DataTable>
           <StyledButton variant="primary" onClick={openNewDialog}>
@@ -312,21 +295,27 @@ const AdminDashboard: React.FC = () => {
           <Button label="Add" onClick={addNewEntry} />
 
           {/* Temporary entries DataTable */}
-          <DataTable value={tempEntries}>
+          <DataTable value={tempEntries} editMode="cell">
             <Column field="id" header="ID" />
             <Column
               field="name"
               header="Name"
-              editor={(props) => textEditor(props, "name", setReviewerData)}
+              editor={textEditor}
+              onCellEditComplete={(e) =>
+                onTempEditComplete(
+                  e,
+                  tempEntries.findIndex((te) => te.id === e.rowData.id)
+                )
+              }
             />
             <Column
               field={tabIndex === 0 ? "department" : "subject"}
               header={tabIndex === 0 ? "Department" : "Subject"}
-              editor={(props) =>
-                textEditor(
-                  props,
-                  tabIndex === 0 ? "department" : "subject",
-                  setReviewerData
+              editor={textEditor}
+              onCellEditComplete={(e) =>
+                onTempEditComplete(
+                  e,
+                  tempEntries.findIndex((te) => te.id === e.rowData.id)
                 )
               }
             />
