@@ -34,16 +34,15 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories
                     KernelGradGateContext dbContext = scope.ServiceProvider.GetRequiredService<KernelGradGateContext>();
                     DbSet<Applicant> dataset = dbContext.Set<Applicant>();
 
-                    var applicant = await dataset
-                                        .Include(a => a.AcademicHistories)
-                                        .Include(a => a.ApplicationDataValues)
-                                        .Include(a => a.ApplicantAdvisorLinks)
-                                        .ThenInclude(aa => aa.FacultyAdvisor)
-                                        .Include(a => a.ReviewerAssignments)
-                                        .ThenInclude(ra => ra.Reviewer)
-                                        .FirstOrDefaultAsync(a => a.Ref == Id);
+                    var applicantQuery = await dataset
+                                            .Include(a => a.AcademicHistories)
+                                            .Include(a => a.ReviewerAssignments)
+                                            .Include(a => a.PotentialAdvisors)
+                                            .Include(a => a.ApplicantAttributes)
+                                            .FirstOrDefaultAsync(a => a.Id == Id);
 
-                    return applicant;
+
+                    return applicantQuery;
                 }
             }
             catch (Exception ex)
@@ -65,11 +64,10 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories
 
                     IQueryable<Applicant> applicantQuery = dataset
                                             .Include(a => a.AcademicHistories)
-                                            .Include(a => a.ApplicationDataValues)
-                                            .Include(a => a.ApplicantAdvisorLinks)
-                                            .ThenInclude(aa => aa.FacultyAdvisor)
                                             .Include(a => a.ReviewerAssignments)
-                                            .ThenInclude(ra => ra.Reviewer);
+                                            .Include(a => a.PotentialAdvisors)
+                                            .Include(a => a.ApplicantAttributes);
+
 
                     if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
                     {
@@ -106,11 +104,9 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories
 
                     IQueryable<Applicant> applicantQuery = dataset
                                             .Include(a => a.AcademicHistories)
-                                            .Include(a => a.ApplicationDataValues)
-                                            .Include(a => a.ApplicantAdvisorLinks)
-                                            .ThenInclude(aa => aa.FacultyAdvisor)
                                             .Include(a => a.ReviewerAssignments)
-                                            .ThenInclude(ra => ra.Reviewer);
+                                            .Include(a => a.PotentialAdvisors)
+                                            .Include(a => a.ApplicantAttributes);
 
 
                     var applicants = await applicantQuery.ToListAsync();

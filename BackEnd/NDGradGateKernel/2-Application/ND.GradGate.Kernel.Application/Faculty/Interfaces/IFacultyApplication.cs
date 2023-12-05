@@ -10,8 +10,7 @@ namespace ND.GradGate.Kernel.Application.Facultys.Interfaces
     public interface IFacultyApplication
     {
         Task<FacultyDto> GetFacultyByIdAsync(int refId);
-        Task<List<FacultyDto>> GetFacultysByNameAsync(string firstName, string lastName);
-
+        Task<List<FacultyDto>> GetFacultysByNameAsync(string name);
 
     }
 }

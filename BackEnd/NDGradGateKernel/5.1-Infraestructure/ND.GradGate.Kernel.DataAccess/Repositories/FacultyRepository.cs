@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using ND.GradGate.Kernel.DataAccess.Context;
 using ND.GradGate.Kernel.DataAccess.Persistent.Repositories;
 using ND.GradGate.Kernel.DataAccess.Repositories.Interfaces;
-using ND.GradGate.Kernel.Domain.FacultyData;
+using ND.GradGate.Kernel.Domain.Faculty;
 
 namespace ND.GradGate.Kernel.DataAccess.Repositories
 {
@@ -35,7 +35,7 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories
                     DbSet<Faculty> dataset = dbContext.Set<Faculty>();
 
                     var Faculty = await dataset
-                                        .FirstOrDefaultAsync(a => a.Ref == Id);
+                                        .FirstOrDefaultAsync(a => a.Id == Id);
 
                     return Faculty;
                 }
@@ -48,7 +48,7 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories
         }
 
 
-        public async Task<List<Faculty>> GetByFacultyNameAsync(string firstName, string lastName)
+        public async Task<List<Faculty>> GetByFacultyNameAsync(string name)
         {
             try
             {
@@ -59,18 +59,11 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories
 
                     IQueryable<Faculty> FacultyQuery = dataset;
 
-                    if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
+                    if (!string.IsNullOrEmpty(name))
                     {
-                        FacultyQuery = FacultyQuery.Where(a => a.FirstName == firstName && a.LastName == lastName);
+                        FacultyQuery = FacultyQuery.Where(a => a.Name == name);
                     }
-                    else if (!string.IsNullOrEmpty(firstName))
-                    {
-                        FacultyQuery = FacultyQuery.Where(a => a.FirstName == firstName);
-                    }
-                    else if (!string.IsNullOrEmpty(lastName))
-                    {
-                        FacultyQuery = FacultyQuery.Where(a => a.LastName == lastName);
-                    }
+
 
                     var Facultys = await FacultyQuery.ToListAsync();
 

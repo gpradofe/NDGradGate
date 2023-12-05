@@ -247,7 +247,6 @@ const DataGrid: React.FC<DataGridProps> = ({
                   disabled
                 />
               ) : (
-                // If not processed yet, show action buttons
                 <>
                   <ActionButton
                     icon="pi pi-check"

@@ -5,20 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ND.GradGate.Kernel.Domain.Faculty
 {
-    public class ReviewerAssignment
+    public class PotentialAdvisor
     {
         public int FacultyId { get; set; }
         public int ApplicantId { get; set; }
-        public int? CommentId { get; set; } // Optional reference to a comment
-        public string Status { get; set; }
 
         // Relationships
         public virtual Faculty Faculty { get; set; }
         public virtual Applicant Applicant { get; set; }
     }
-
 }

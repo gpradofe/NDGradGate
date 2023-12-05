@@ -38,30 +38,29 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
 
                 ApplicantDto response = new ApplicantDto
                 {
-                    Ref = applicant.Ref,
+                    Ref = applicant.Id,
                     LastName = applicant.LastName,
                     FirstName = applicant.FirstName,
                     Email = applicant.Email,
                     Sex = applicant.Sex,
                     Ethnicity = applicant.Ethnicity,
-                    CitizenshipCountry = applicant.CitizenshipCountry,
-                    AreaOfStudy = applicant.AreaOfStudy,
-                    ApplicationStatus = applicant.ApplicationStatus,
-                    DepartmentRecommendation = applicant.DepartmentRecommendation,
+                    CitizenshipCountry = applicant.Country,
+                    AreaOfStudy = applicant.Field,
+                    ApplicationStatus = applicant.Decision,
                     AcademicHistories = applicant.AcademicHistories.Select(ah => new AcademicHistoryDto
                     {
                         Institution = ah.Institution,
                         Major = ah.Major,
                         GPA = ah.Gpa
                     }).ToList(),
-                    FacultyAdvisors = applicant.ApplicantAdvisorLinks.Select(aal => new FacultyAdvisorDto
+                    FacultyAdvisors = applicant.PotentialAdvisors.Select(aal => new FacultyAdvisorDto
                     {
-                        Name = aal.FacultyAdvisor.Name
+                        Name = aal.Faculty.Name
                     }).ToList(),
                     Reviewers = applicant.ReviewerAssignments.Select(ra => new ReviewerDto
                     {
-                        Name = ra.Reviewer.Name,
-                        Recommendation = ra.Recommendation
+                        Name = ra.Faculty.Name,
+                        Recommendation = ra.Status
                     }).ToList()
                 };
 

@@ -9,23 +9,23 @@ namespace ND.GradGate.Kernel.Domain.ApplicantData.Mapping
         {
             builder.ToTable("academic_history");
 
+            // Key
             builder.HasKey(ah => ah.Id).HasName("pk_academic_history");
             builder.Property(ah => ah.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
+            // Fields
             builder.Property(ah => ah.ApplicantRef).HasColumnName("applicant_ref").IsRequired();
-            builder.Property(ah => ah.Institution).HasColumnName("institution").IsRequired();
-            builder.Property(ah => ah.Major).HasColumnName("major").IsRequired();
-            builder.Property(ah => ah.Gpa).HasColumnName("gpa").IsRequired()
-                  .HasPrecision(3, 2); 
-            builder.Property(ah => ah.FromDate).HasColumnName("from_date").IsRequired();
-            builder.Property(ah => ah.ToDate).HasColumnName("to_date").IsRequired();
+            builder.Property(ah => ah.Institution).HasColumnName("institution");
+            builder.Property(ah => ah.Major).HasColumnName("major");
+            builder.Property(ah => ah.Gpa).HasColumnName("gpa").HasColumnType("numeric");
+            builder.Property(ah => ah.FromDate).HasColumnName("from_date").HasColumnType("date");
+            builder.Property(ah => ah.ToDate).HasColumnName("to_date").HasColumnType("date");
 
-            builder.HasIndex(ah => ah.ApplicantRef).HasDatabaseName("idx_academic_history_applicant_ref");
-
+            // Relationships
             builder.HasOne(ah => ah.Applicant)
                    .WithMany(a => a.AcademicHistories)
-                   .HasForeignKey(ah => ah.ApplicantRef)
-                   .HasConstraintName("fk_academic_history_applicants");
+                   .HasForeignKey(ah => ah.ApplicantRef);
         }
     }
+
 }

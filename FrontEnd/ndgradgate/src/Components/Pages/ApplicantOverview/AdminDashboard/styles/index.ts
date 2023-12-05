@@ -1,6 +1,5 @@
-import { styled } from "styled-components";
+import styled from "styled-components";
 
-// Styles (Add these according to your existing styles)
 export const DashboardContainer = styled.div`
   padding: 20px;
   background: #f4f7fa;

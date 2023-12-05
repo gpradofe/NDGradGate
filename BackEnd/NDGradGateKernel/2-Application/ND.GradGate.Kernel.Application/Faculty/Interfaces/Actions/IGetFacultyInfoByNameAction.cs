@@ -9,7 +9,7 @@ namespace ND.GradGate.Kernel.Application.Facultys.Interfaces.Actions
 {
     public interface IGetFacultysInfoByNameAction
     {
-        Task<List<FacultyDto>> GetFacultyInfoAsync(string firstName, string lastName);
+        Task<List<FacultyDto>> GetFacultyInfoAsync(string name);
 
     }
 }

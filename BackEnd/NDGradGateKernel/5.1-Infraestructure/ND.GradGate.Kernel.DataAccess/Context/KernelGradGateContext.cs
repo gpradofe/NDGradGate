@@ -8,7 +8,7 @@ namespace ND.GradGate.Kernel.DataAccess.Context
     public class KernelGradGateContext : DbContext
     {
         #region Attributes
-        public static string SCHEMA => "admin_gradgate";
+        public static string SCHEMA => "gradgate";
         #endregion
         #region Constructor
         public KernelGradGateContext(DbContextOptions<KernelGradGateContext> options) : base(options)

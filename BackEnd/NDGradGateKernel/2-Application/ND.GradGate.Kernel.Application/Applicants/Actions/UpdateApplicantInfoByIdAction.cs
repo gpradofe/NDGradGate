@@ -79,7 +79,7 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
             // Example implementation. Adapt as necessary
             foreach (var dtoHistory in dto.AcademicHistories)
             {
-                var domainHistory = domain.AcademicHistories.FirstOrDefault(h => h.ApplicantRef == domain.Ref);
+                var domainHistory = domain.AcademicHistories.FirstOrDefault(h => h.ApplicantRef == domain.Id);
 
 
                 if (domainHistory != null)

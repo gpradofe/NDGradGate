@@ -48,13 +48,13 @@ namespace ND.GradGate.Kernel.Application.Facultys
             }
         }
 
-        public async Task<List<FacultyDto>> GetFacultysByNameAsync(string firstName, string lastName)
+        public async Task<List<FacultyDto>> GetFacultysByNameAsync(string name)
         {
             try
             {
-                _logger.LogInformation($"Search for Facultys with names matching: FirstName: {firstName}, LastName: {lastName}.");
+                _logger.LogInformation($"Search for Facultys with names matching: {name}.");
 
-                List<FacultyDto> Facultys = await _getFacultysInfoByNameAction.GetFacultyInfoAsync(firstName, lastName);
+                List<FacultyDto> Facultys = await _getFacultysInfoByNameAction.GetFacultyInfoAsync(name);
 
                 return Facultys;
             }

@@ -24,7 +24,6 @@ class ApiService {
     const mockFaculty: Faculty[] = [
       { id: 1, name: "Dr. Smith", department: "Computer Science" },
       { id: 2, name: "Dr. Johnson", department: "Engineering" },
-      // ... more faculty members
     ];
     console.log("Faculty loaded:", mockFaculty);
     return mockFaculty;

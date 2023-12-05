@@ -16,6 +16,7 @@ namespace ND.GradGate.Kernel.Domain.ApplicantData
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
 
+        // Relationship
         public virtual Applicant Applicant { get; set; }
     }
 
