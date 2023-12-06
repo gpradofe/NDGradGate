@@ -19,24 +19,26 @@ const TabPanelContainer = styled.div`
 interface Faculty {
   id: number;
   name: string;
+  email: string;
   department: string;
 }
 
 interface Reviewer {
   id: number;
   name: string;
+  email: string;
   subject: string;
 }
 
 // Mock Data
 const initialFacultyData: Faculty[] = [
-  { id: 1, name: "John Doe", department: "Computer Science" },
-  { id: 2, name: " Tim Weninger", department: "Computer Science" },
+  { id: 1, name: "John Doe", email:"jdoe@nd.edu", department: "Computer Science" },
+  { id: 2, name: " Tim Weninger", email:"tweninger@nd.edu", department: "Computer Science" },
 ];
 
 const initialReviewerData: Reviewer[] = [
-  { id: 1, name: "Jane Smith", subject: "Computer Science" },
-  { id: 2, name: " Tim Weninger", subject: "Computer Science" },
+  { id: 1, name: "John Doe", email:"jdoe@nd.edu", subject: "Computer Science" },
+  { id: 2, name: " Tim Weninger", email:"tweninger@nd.edu", subject: "Computer Science" },
 ];
 
 // Helper component for TabPanel
@@ -134,6 +136,7 @@ const AdminDashboard: React.FC = () => {
       const newFaculty: Faculty = {
         id: facultyData.length + tempEntries.length + 1,
         name: newEntry.name || "", // Default to empty string if undefined
+        email: newEntry.email || "", // Default to empty string if undefined
         department: newEntry.department || "", // Default to empty string if undefined
       };
       setTempEntries([...tempEntries, newFaculty]);
@@ -142,6 +145,7 @@ const AdminDashboard: React.FC = () => {
       const newReviewer: Reviewer = {
         id: reviewerData.length + tempEntries.length + 1,
         name: newEntry.name || "", // Default to empty string if undefined
+        email: newEntry.email || "", // Default to empty string if undefined
         subject: newEntry.department || "", // Using 'department' field for 'subject'
       };
       setTempEntries([...tempEntries, newReviewer]);
@@ -233,6 +237,7 @@ const AdminDashboard: React.FC = () => {
           >
             <Column field="id" header="ID" />
             <Column field="name" header="Name" editor={textEditor} />
+            <Column field="email" header="Email" editor={textEditor} />
             <Column
               field="department"
               header="Department"
@@ -256,6 +261,7 @@ const AdminDashboard: React.FC = () => {
           >
             <Column field="id" header="ID" />
             <Column field="name" header="Name" editor={textEditor} />
+            <Column field="email" header="Email" editor={textEditor} />
             <Column field="subject" header="Subject" editor={textEditor} />
             <Column rowEditor />
             <Column body={actionBodyTemplate} />
@@ -296,6 +302,12 @@ const AdminDashboard: React.FC = () => {
             placeholder="Name"
           />
           <InputText
+            name="email"
+            value={newEntry.email}
+            onChange={handleNewEntryChange}
+            placeholder="Email"
+          />
+          <InputText
             name="department"
             value={newEntry.department}
             onChange={handleNewEntryChange}
@@ -309,6 +321,17 @@ const AdminDashboard: React.FC = () => {
             <Column
               field="name"
               header="Name"
+              editor={textEditor}
+              onCellEditComplete={(e) =>
+                onTempEditComplete(
+                  e,
+                  tempEntries.findIndex((te) => te.id === e.rowData.id)
+                )
+              }
+            />
+            <Column
+              field="email"
+              header="Email"
               editor={textEditor}
               onCellEditComplete={(e) =>
                 onTempEditComplete(
