@@ -40,7 +40,16 @@ const ReviewerOverviewPage: React.FC = () => {
         <Row>
           <Col md={12}>
             <Section>
-              <Header>Reviewer Overview</Header>
+              <Header>
+            <header className="header-container">
+              <div className="dashboard">
+                <h1>Reviewer Dashboard</h1>
+              </div>
+              <div className="user-info">
+                <p>Current User: Tim Weninger</p>
+              </div>
+          </header>
+          </Header>
               <ReviewerDataGrid
                 data={assignedApplications}
                 onRecommendFaculties={recommendFaculties}

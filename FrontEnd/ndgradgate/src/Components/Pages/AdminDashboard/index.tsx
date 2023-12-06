@@ -31,10 +31,12 @@ interface Reviewer {
 // Mock Data
 const initialFacultyData: Faculty[] = [
   { id: 1, name: "John Doe", department: "Computer Science" },
+  { id: 2, name: " Tim Weninger", department: "Computer Science" },
 ];
 
 const initialReviewerData: Reviewer[] = [
-  { id: 1, name: "Jane Smith", subject: "Mathematics" },
+  { id: 1, name: "Jane Smith", subject: "Computer Science" },
+  { id: 2, name: " Tim Weninger", subject: "Computer Science" },
 ];
 
 // Helper component for TabPanel
@@ -204,7 +206,14 @@ const AdminDashboard: React.FC = () => {
   return (
     <DashboardContainer>
       <Container>
-        <Header>Admin Dashboard</Header>
+        <header className="header-container">
+          <div className="dashboard">
+            <h1>Admin Dashboard</h1>
+          </div>
+          <div className="user-info">
+            <p>Current User: Tim Weninger</p>
+          </div>
+         </header>
         <Tabs
           value={tabIndex}
           onChange={handleTabChange}

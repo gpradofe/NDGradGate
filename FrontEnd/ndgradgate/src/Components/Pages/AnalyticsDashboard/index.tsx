@@ -61,7 +61,16 @@ const AnalyticsDashboard: React.FC = () => {
   return (
     <DashboardContainer>
       <Container fluid>
-        <Header>Graduate Studies Application Analytics</Header>
+        <Header>
+            <header className="header-container">
+              <div className="dashboard">
+                <h1>Graduate Studies Application Analytics</h1>
+              </div>
+              <div className="user-info">
+                <p>Current User: Tim Weninger</p>
+              </div>
+          </header>
+          </Header>
         <Row>
           <Col md={6}>
             <ChartContainer>

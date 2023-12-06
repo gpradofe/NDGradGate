@@ -76,7 +76,16 @@ const ApplicantOverview: React.FC = () => {
         <Row>
           <Col md={12}>
             <Section>
-              <Header>Application Overview</Header>
+              <Header>
+            <header className="header-container">
+              <div className="dashboard">
+                <h1>Applicant Overview</h1>
+              </div>
+              <div className="user-info">
+                <p>Current User: Tim Weninger</p>
+              </div>
+          </header>
+          </Header>
               <DataGrid
                 data={filteredApplications}
                 globalFilter={globalFilter}

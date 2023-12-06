@@ -23,7 +23,16 @@ const FacultyDashboard: React.FC = () => {
     <DashboardContainer>
       <Container fluid>
         <Section>
-          <Header>Faculty Dashboard</Header>
+          <Header>
+            <header className="header-container">
+              <div className="dashboard">
+                <h1>Faculty Dashboard</h1>
+              </div>
+              <div className="user-info">
+                <p>Current User: Tim Weninger</p>
+              </div>
+          </header>
+          </Header>
           <FacultyDataGrid
             data={applicants}
             onAdvisorAcceptance={handleAdvisorAcceptance}
