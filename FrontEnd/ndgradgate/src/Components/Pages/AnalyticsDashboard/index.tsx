@@ -118,8 +118,6 @@ const AnalyticsDashboard: React.FC = () => {
             </ChartContainer>
           </Col>
         </Row>
-
-        {/* Additional Rows and Columns for more charts can be added here */}
       </Container>
     </DashboardContainer>
   );
