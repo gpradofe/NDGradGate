@@ -12,23 +12,7 @@ const AnalyticsDashboard: React.FC = () => {
       {
         label: "Total Applications",
         backgroundColor: "#42A5F5",
-        data: [300, 450, 320, 500, 600],
-      },
-    ],
-  };
-
-  const ethnicityDataCurrent = {
-    labels: ["Asian", "Black", "Hispanic", "White", "Other"],
-    datasets: [
-      {
-        backgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-        ],
-        data: [300, 100, 150, 400, 50],
+        data: [2000,2300,2450,2600,2700],
       },
     ],
   };
@@ -39,13 +23,13 @@ const AnalyticsDashboard: React.FC = () => {
       {
         label: "Acceptance Rate (%)",
         backgroundColor: "#FFC107",
-        data: [60, 55, 70, 65, 75],
+        data: [10, 9, 8.6, 8.2, 7],
       },
     ],
   };
 
   const areaOfStudyData = {
-    labels: ["Engineering", "Science", "Arts", "Business", "IT"],
+    labels: ["Computer Science", "Chemical Engineering", "Mechanical Engineering", "Environmental Engineering", "Electrical Engineering", "Other"],
     datasets: [
       {
         backgroundColor: [
@@ -54,8 +38,9 @@ const AnalyticsDashboard: React.FC = () => {
           "#FFCE56",
           "#4BC0C0",
           "#9966FF",
+          "#990000",
         ],
-        data: [200, 150, 100, 250, 200],
+        data: [1000, 100, 600, 300, 200,300],
       },
     ],
   };
@@ -87,24 +72,17 @@ const AnalyticsDashboard: React.FC = () => {
           </Col>
           <Col md={6}>
             <ChartContainer>
-              <Card title="Ethnicity Distribution">
-                <Chart type="pie" data={ethnicityDataCurrent} />
+              <Card title="Area of Study Distribution">
+                <Chart type="doughnut" data={areaOfStudyData} />
               </Card>
             </ChartContainer>
           </Col>
         </Row>
         <Row>
-          <Col md={6}>
+          <Col md={12}>
             <ChartContainer>
               <Card title="Acceptance Rate Over Years">
                 <Chart type="line" data={acceptanceRateData} />
-              </Card>
-            </ChartContainer>
-          </Col>
-          <Col md={6}>
-            <ChartContainer>
-              <Card title="Area of Study Distribution">
-                <Chart type="doughnut" data={areaOfStudyData} />
               </Card>
             </ChartContainer>
           </Col>
