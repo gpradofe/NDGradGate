@@ -10,8 +10,7 @@ namespace ND.GradGate.Kernel.Domain.Contracts.Faculty
     public class FacultyDto
     {
         public int Ref { get; set; }
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
     }
 }

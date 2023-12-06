@@ -1,5 +1,5 @@
 using ND.GradGate.Kernel.DataAccess.Persistent.Repositories.Interfaces;
-using ND.GradGate.Kernel.Domain.FacultyData;
+using ND.GradGate.Kernel.Domain.Faculty;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,6 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories.Interfaces
     public interface IFacultyRepository : IRepository<Faculty, int>
     {
         Task<Faculty> GetByFacultyIdAsync(int Id);
-        Task<List<Faculty>> GetByFacultyNameAsync(string firstName, string lastName);
+        Task<List<Faculty>> GetByFacultyNameAsync(string name);
     }
 }

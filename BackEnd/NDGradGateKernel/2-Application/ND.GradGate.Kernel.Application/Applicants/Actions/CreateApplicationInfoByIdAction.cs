@@ -44,16 +44,15 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
         {
             var applicant = new Applicant
             {
-                Ref = dto.Ref,
+                Id = dto.Ref,
                 LastName = dto.LastName,
                 FirstName = dto.FirstName,
                 Email = dto.Email,
                 Sex = dto.Sex,
                 Ethnicity = dto.Ethnicity,
-                CitizenshipCountry = dto.CitizenshipCountry,
-                AreaOfStudy = dto.AreaOfStudy,
-                ApplicationStatus = dto.ApplicationStatus,
-                DepartmentRecommendation = dto.DepartmentRecommendation,
+                Country = dto.CitizenshipCountry,
+                Field = dto.AreaOfStudy,
+                Decision = dto.ApplicationStatus,
 
                 AcademicHistories = dto.AcademicHistories?.Select(historyDto => new AcademicHistory
                 {
@@ -61,7 +60,6 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
                     Institution = historyDto.Institution,
                     Major = historyDto.Major,
                     Gpa = historyDto.GPA
-                    // Add additional properties like FromDate, ToDate etc. if they are part of your DTO
                 }).ToList() ?? new List<AcademicHistory>()
             };
 

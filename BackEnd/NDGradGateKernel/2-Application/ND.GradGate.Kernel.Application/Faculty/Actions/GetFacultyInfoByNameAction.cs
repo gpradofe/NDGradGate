@@ -28,19 +28,18 @@ namespace ND.GradGate.Kernel.Application.Facultys.Actions
         #endregion
 
         #region Methods
-        public async Task<List<FacultyDto>> GetFacultyInfoAsync(string firstName, string lastName)
+        public async Task<List<FacultyDto>> GetFacultyInfoAsync(string name)
         {
             try
             {
-                _logger.LogInformation($"Fetching information for Facultys with names matching: FirstName: {firstName}, LastName: {lastName}");
+                _logger.LogInformation($"Fetching information for Facultys with names matching: {name}");
 
-                var Facultys = await _FacultyRepository.GetByFacultyNameAsync(firstName, lastName);
+                var Facultys = await _FacultyRepository.GetByFacultyNameAsync(name);
 
                 var response = Facultys.Select(Faculty => new FacultyDto
                 {
-                    Ref = Faculty.Ref,
-                    LastName = Faculty.LastName,
-                    FirstName = Faculty.FirstName,
+                    Ref = Faculty.Id,
+                    Name = Faculty.Name,
                 }).ToList();
 
                 return response;

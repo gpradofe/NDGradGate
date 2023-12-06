@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace ND.GradGate.Kernel.Domain.EAV
 {
-    public class ApplicationDataValue : AbstractEntity<ApplicationDataValue, int>
+    public class ApplicantAttribute : AbstractEntity<ApplicantAttribute, int>
     {
-        public int ApplicantRef { get; set; }
-        public int AttributeId { get; set; }
+        public int ApplicantId { get; set; }
+        public string Attribute { get; set; }
         public string Value { get; set; }
 
+        // Relationship
         public virtual Applicant Applicant { get; set; }
-        public virtual Attribute Attribute { get; set; }
     }
 }

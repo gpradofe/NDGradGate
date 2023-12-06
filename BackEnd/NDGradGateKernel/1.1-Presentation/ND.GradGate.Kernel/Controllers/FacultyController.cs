@@ -47,21 +47,20 @@ namespace ND.GradGate.Kernel.Controllers
         }
 
         [HttpGet("GetFacultysByName")]
-        public async Task<IActionResult> GetFacultysByNameAsync([FromQuery] string? firstName, [FromQuery] string? lastName)
+        public async Task<IActionResult> GetFacultysByNameAsync([FromQuery] string name)
         {
             try
             {
-                if (string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName))
+                if (string.IsNullOrEmpty(name))
                 {
-                    return BadRequest("Either firstName or lastName must be provided.");
+                    return BadRequest("Name must be provided.");
                 }
 
-                using (LogContext.PushProperty("FirstName", firstName))
-                using (LogContext.PushProperty("LastName", lastName))
+                using (LogContext.PushProperty("Name", name))
                 {
-                    _logger.LogInformation($"Search for Facultys with names matching: FirstName: {firstName}, LastName: {lastName}.");
+                    _logger.LogInformation($"Search for Facultys with names matching:  {name}.");
 
-                    List<FacultyDto> Facultys = await _FacultyApplication.GetFacultysByNameAsync(firstName, lastName);
+                    List<FacultyDto> Facultys = await _FacultyApplication.GetFacultysByNameAsync( name);
                     if (Facultys != null && Facultys.Any())
                     {
                         return Ok(Facultys);

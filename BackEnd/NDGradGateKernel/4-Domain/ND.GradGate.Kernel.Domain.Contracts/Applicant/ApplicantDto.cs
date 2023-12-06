@@ -13,7 +13,7 @@ namespace ND.GradGate.Kernel.Domain.Contracts.Applicant
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string Email { get; set; }
-        public char Sex { get; set; }
+        public string Sex { get; set; }
         public string Ethnicity { get; set; }
         public string CitizenshipCountry { get; set; }
         public string AreaOfStudy { get; set; }
