@@ -22,5 +22,7 @@ namespace ND.GradGate.Kernel.Domain.Contracts.Applicant
         public List<AcademicHistoryDto>? AcademicHistories { get; set; }
         public List<FacultyAdvisorDto>? FacultyAdvisors { get; set; }
         public List<ReviewerDto>? Reviewers { get; set; }
+        public List<ApplicantAttributeDto>? Attributes { get; set; }
+        public List<CommentDto>? Comments { get; set; }
     }
 }
