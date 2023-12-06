@@ -31,13 +31,41 @@ const FacultyDashboard: React.FC = () => {
               <div className="user-info">
                 <p>Current User: Tim Weninger</p>
               </div>
-          </header>
+            </header>
           </Header>
-          <FacultyDataGrid
-            data={applicants}
-            onAdvisorAcceptance={handleAdvisorAcceptance}
-            onAdvisorRejection={handleAdvisorRejection}
-          />
+          <table style={{ width: "100%" }} >
+                <thead>
+                  <tr style={{ border: "1px solid black" }}>
+                    <th>First Name</th>
+                    <th>Applicant Status</th>
+                    <th>Area of Study</th>
+                    <th>Want Student</th>
+                    <th>Comments</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ border: "1px solid black" }}>
+                    <td>Samuel</td>
+                    <td>In Progress</td>
+                    <td>Data Mining and Machine Learning</td>
+                    <td>
+                      <input type="checkbox" id="yes" name="yes" value="Yes"></input>
+                      <label> Yes</label><br></br>
+                      <input type="checkbox" id="no" name="no" value="No"></input>
+                      <label> No</label>
+                    </td>
+                    <td><form action="/submit" method="post">
+         <input type="text" id="comments_weninger" name="comments_weninger" placeholder="None"></input>
+    </form></td>
+                  </tr>
+                </tbody>
+              </table>
+        </Section>
+      </Container>
+      <Container>
+        <Section>
+          Number of Students admitted for Tim Weninger: 0  <br></br>
+          Number of Students needed for Tim Weninger: <input type="text" id="comments_weninger" name="comments_weninger" placeholder="1"></input>
         </Section>
       </Container>
     </DashboardContainer>
