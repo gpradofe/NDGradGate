@@ -18,14 +18,14 @@ const ApplicantOverview: React.FC = () => {
     [key: string]: boolean;
   }>({
     FirstName: true,
-    LastName: true,
-    Email: true,
+    LastName: false,
+    Email: false,
     ApplicationStatus: true,
     AreaOfStudy: true,
-    CitizenshipCountry: true,
+    CitizenshipCountry: false,
     DepartmentRecommendation: false,
-    Ethnicity: true,
-    Sex: true,
+    Ethnicity: false,
+    Sex: false,
     AcademicHistories: false,
   });
   const toast = useRef<Toast>(null);

@@ -5,6 +5,9 @@ import { Toast } from "primereact/toast";
 import { Faculty } from "../../../types/Application/Faculty";
 import { Applicant } from "../../../types/Application/Applicant";
 import ReviewerDataGrid from "../../Atoms/ReviewerDataGrid";
+import { ChartContainer } from "../AnalyticsDashboard/styles";
+import { Chart } from "primereact/chart";
+import { Card } from "primereact/card";
 
 const ReviewerOverviewPage: React.FC = () => {
   const [assignedApplications, setAssignedApplications] = useState<Applicant[]>(
@@ -33,6 +36,19 @@ const ReviewerOverviewPage: React.FC = () => {
     value: fac.id,
   }));
 
+   const statusBar = {
+    labels: ["Todo", "In Progress", "Complete"],
+    datasets: [
+      {
+        backgroundColor: [
+          "#FF0000",
+          "#FFCE56",
+          "#00FF00",
+        ],
+        data: [0,1,0],
+      },
+    ],
+  };
 
   return (
     <DashboardContainer>
@@ -51,6 +67,12 @@ const ReviewerOverviewPage: React.FC = () => {
                   </div>
                 </header>
               </Header>
+            </Section>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <Section>
               {/* Your existing table */}
               <table style={{ width: "100%" }} >
                 <thead>
@@ -68,7 +90,7 @@ const ReviewerOverviewPage: React.FC = () => {
                     <td>In Progress</td>
                     <td>Data Mining and Machine Learning</td>
                     <td>
-                      <input type="checkbox" id="vehicle1" name="prof1" value="John Doe"></input>
+                      <input type="checkbox" id="prof1" name="prof1" value="John Doe"></input>
                       <label> John Doe</label><br></br>
                       <input type="checkbox" id="prof2" name="prof2" value="Tim Weninger"></input>
                       <label> Tim Weninger</label>
@@ -80,6 +102,16 @@ const ReviewerOverviewPage: React.FC = () => {
                 </tbody>
               </table>
             </Section>
+          </Col>
+        </Row>
+
+        <Row>
+        <Col md={3}>
+            <ChartContainer>
+              <Card title="Status">
+                <Chart type="doughnut" data={statusBar} />
+              </Card>
+            </ChartContainer>
           </Col>
         </Row>
       </Container>

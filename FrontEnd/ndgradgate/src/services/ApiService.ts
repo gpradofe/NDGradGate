@@ -22,8 +22,8 @@ class ApiService {
   public async fetchFaculty(): Promise<Faculty[]> {
     // Replace with actual API call if needed
     const mockFaculty: Faculty[] = [
-      { id: 1, name: "Dr. Smith", department: "Computer Science" },
-      { id: 2, name: "Dr. Johnson", department: "Engineering" },
+      { id: 1, name: "John Doe", department: "Computer Science" },
+      { id: 2, name: "Tim Weninger", department: "Computer Science" },
     ];
     console.log("Faculty loaded:", mockFaculty);
     return mockFaculty;
