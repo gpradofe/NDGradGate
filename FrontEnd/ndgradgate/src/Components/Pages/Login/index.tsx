@@ -2,15 +2,21 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { LoginContainer, StyledForm } from "./styles";
+import logo from "./notreDameDrawinig.png";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [popup, setPopup] = useState<Window | null>(null);
   const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }
   /*
   const handleSSOLogin = () => {
     const ssoUrl =
@@ -55,6 +61,9 @@ const LoginPage: React.FC = () => {
   return (
     <LoginContainer>
       <StyledForm onSubmit={handleSubmit}>
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
+        <img src={logo} alt="Logo" style={{width: "50%"}}/>
+        </div>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -62,6 +71,14 @@ const LoginPage: React.FC = () => {
             placeholder="Enter email"
             value={email}
             onChange={handleEmailChange}
+          />
+          <br />
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Enter password"
+            value={password}
+            onChange={handlePasswordChange}
           />
         </Form.Group>
         <Button variant="primary" type="submit">
