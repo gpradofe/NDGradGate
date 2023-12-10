@@ -1,9 +1,9 @@
 import axios from "axios";
 import { Applicant } from "../types/Application/Applicant";
 import { Faculty } from "../types/Application/Faculty";
-
+import { Setting } from "../types/Settings/Setting";
 class ApiService {
-  private baseURL: string = "https://api.gradgate.org/api/"; // Replace with your actual base URL
+  private baseURL: string = "https://localhost:5009/api/"; // Replace with your actual base URL
 
   public async fetchApplications(): Promise<Applicant[]> {
     try {
@@ -21,12 +21,42 @@ class ApiService {
   // Simulating fetching faculty since no endpoint was provided
   public async fetchFaculty(): Promise<Faculty[]> {
     // Replace with actual API call if needed
-    const mockFaculty: Faculty[] = [
-      { id: 1, name: "Dr. Smith", department: "Computer Science" },
-      { id: 2, name: "Dr. Johnson", department: "Engineering" },
-    ];
-    console.log("Faculty loaded:", mockFaculty);
-    return mockFaculty;
+
+    try {
+      const response = await axios.get<Faculty[]>(
+        `${this.baseURL}Faculty/GetAllFaculty`
+      );
+      console.log("Faculty fetched:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching faculty:", error);
+      throw error;
+    }
+  }
+  public async fetchSettings(): Promise<Setting[]> {
+    try {
+      const response = await axios.get<Setting[]>(
+        `${this.baseURL}Setting/GetAllSettings`
+      );
+      console.log("Settings fetched:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+      throw error;
+    }
+  }
+  public async addOrUpdateSetting(setting: Setting): Promise<Setting> {
+    try {
+      const response = await axios.post<Setting>(
+        `${this.baseURL}Setting/AddOrUpdateSetting`,
+        setting
+      );
+      console.log("Setting added/updated:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding/updating setting:", error);
+      throw error;
+    }
   }
 }
 

@@ -1,31 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { DashboardContainer, Header, Section } from "./styles";
 import { Toast } from "primereact/toast";
-import { Applicant } from "../../../../types/Application/Applicant";
-import { Faculty } from "../../../../types/Application/Faculty";
 import DataGrid from "../../../Atoms/DataGrid";
-import apiServiceInstance from "../../../../services/ApiService";
+import { useApplicationContext } from "../../../../context/ApplicationContext";
 
 const ApplicantOverview: React.FC = () => {
-  const [applications, setApplications] = useState<Applicant[]>([]);
-  const [filteredApplications, setFilteredApplications] = useState<Applicant[]>(
-    []
-  );
+  const { applications, faculty } = useApplicationContext();
   const [globalFilter, setGlobalFilter] = useState("");
-  const [faculty, setFaculty] = useState<Faculty[]>([]);
   const [visibleColumns, setVisibleColumns] = useState<{
     [key: string]: boolean;
   }>({
     FirstName: true,
     LastName: true,
     Email: true,
-    ApplicationStatus: true,
+    ApplicationStatus: false,
     AreaOfStudy: true,
     CitizenshipCountry: true,
     DepartmentRecommendation: false,
-    Ethnicity: true,
-    Sex: true,
+    Ethnicity: false,
+    Sex: false,
     AcademicHistories: false,
   });
   const toast = useRef<Toast>(null);
@@ -39,15 +33,6 @@ const ApplicantOverview: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    apiServiceInstance
-      .fetchApplications()
-      .then((response) => {
-        setApplications(response);
-        setFilteredApplications(response);
-      })
-      .catch((error) => console.error("Error fetching applications:", error));
-  }, []);
   const assignReviewer = (applicationRef: number, reviewerId: number) => {
     console.log(
       `Assign reviewer ${reviewerId} to application ${applicationRef}`
@@ -57,18 +42,20 @@ const ApplicantOverview: React.FC = () => {
   const updateApplicationStatus = (applicationRef: number, status: string) => {
     console.log(`Update application ${applicationRef} status to ${status}`);
   };
+
+  const filteredApplications = useMemo(() => {
+    return applications.filter((application) =>
+      Object.values(application).some((value) =>
+        value.toString().toLowerCase().includes(globalFilter.toLowerCase())
+      )
+    );
+  }, [applications, globalFilter]);
+
   const facultyOptions = faculty.map((fac) => ({
-    label: fac.name,
-    value: fac.id,
+    label: fac.Name,
+    value: fac.Id,
   }));
-  useEffect(() => {
-    apiServiceInstance
-      .fetchFaculty()
-      .then((response) => {
-        setFaculty(response); // Make sure the API returns the data in `response.data`
-      })
-      .catch((error) => console.error("Error fetching faculty:", error));
-  }, []);
+
   return (
     <DashboardContainer>
       <Toast ref={toast} />

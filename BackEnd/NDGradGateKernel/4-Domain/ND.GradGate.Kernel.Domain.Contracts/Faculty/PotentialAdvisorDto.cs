@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ND.GradGate.Kernel.Domain.Contracts.Faculty
 {
-    public class CommentDto
+    public class PotentialAdvisorDto
     {
         public int FacultyId { get; set; }
         public int ApplicantId { get; set; }
-        public string Content { get; set; }
-        public DateTime Date { get; set; }
+
     }
+
 }

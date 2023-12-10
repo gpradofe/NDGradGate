@@ -5,6 +5,7 @@ using ND.GradGate.Kernel.DataAccess.Context;
 using ND.GradGate.Kernel.DataAccess.Persistent.Repositories;
 using ND.GradGate.Kernel.DataAccess.Repositories.Interfaces;
 using ND.GradGate.Kernel.Domain.Faculty;
+using System.Xml.Linq;
 
 namespace ND.GradGate.Kernel.DataAccess.Repositories
 {
@@ -77,6 +78,32 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories
             }
         }
 
+        public async Task<List<Faculty>> GetAllFacultyAsync()
+        {
+            try
+            {
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    KernelGradGateContext dbContext = scope.ServiceProvider.GetRequiredService<KernelGradGateContext>();
+                    DbSet<Faculty> dataset = dbContext.Set<Faculty>();
+
+                    IQueryable<Faculty> FacultyQuery = dataset.Include(c => c.Comments)
+                                                              .Include(r => r.ReviewerAssignments)
+                                                              .Include(p => p.PotentialAdvisors);
+                        
+
+
+                    List<Faculty> listFaculty = await FacultyQuery.ToListAsync();
+
+                    return listFaculty;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+        }
 
 
         #endregion

@@ -1,73 +1,102 @@
-import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import React, { useState, useContext } from "react";
+import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { LoginContainer, StyledForm } from "./styles";
+import { useApplicationContext } from "../../../context/ApplicationContext";
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [popup, setPopup] = useState<Window | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [password, setPassword] = useState<string>("");
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const navigate = useNavigate();
+  const { faculty, setCurrentUser } = useApplicationContext();
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-  /*
-  const handleSSOLogin = () => {
-    const ssoUrl =
-      "https://okta.nd.edu/app/zoomus/exk114raeoSv6qgBc357/sso/saml?SAMLRequest=fZJba8IwFMff9ylK3ntJvC7Yis7JBIfF1g32MmJ71GKb1Jy0jH361RtzDHw8kP%2FvXH4ZDL%2BK3KpBY6akT6jjEQtkotJMbn2yiqd2nwyDhwGKImclH1VmJ5dwqACNNUIEbZrck5JYFaAj0HWWwGo598nOmBK560plNKSiAOdbqcKp0D2i3ChaEGvSUDIpzKn1NaD2RjgydSCtXFGW7jHWpOBrT2lbC1BR3T1sx0mr03MR1QlHrKnSCZym88lG5AjEmk188v48%2FvSSzSbtU9FiKfUopd3Hbq8DgvXa7XWPUmEneQbSNAEMBWJWwy8CsYKZRCOk8QnzWMum1PZoTDucMU49p9%2F3PogVamVUovJxJs%2BHq7TkSmCGXDarIzcJj0avc84cj6%2FPj5C%2FxHFoh4soJtbbVQA7CmiUSOTnk99nlZfGJDgb4qeJ9S3hPkBcHZLgn6mBe8sMLuXfTxD8AA%3D%3D&_x_zm_rtaid=OcYLC3CMSgCzEbtmW4U6AQ.1698852130873"; // Your SSO URL here. // Replace with the actual URL
-    const newPopup = window.open(ssoUrl, "_blank", "width=500,height=600");
-    setPopup(newPopup);
-
-    if (!newPopup) {
-      console.error(
-        "Failed to open the SSO window. Possibly blocked by a popup blocker."
-      );
-      return;
-    }
+  const handleUserChange = (e: React.ChangeEvent<any>) => {
+    setSelectedUserId(parseInt(e.target.value, 10));
   };
 
-  const checkPopup = () => {
-    const check = setInterval(() => {
-      if (!popup || popup.closed) {
-        clearInterval(check);
-        console.log("Popup closed by user");
-        // Here, ideally, check if the authentication was successful
-        // For now, just sending the message
-        window.postMessage("SSO_SUCCESS", window.location.origin);
-      }
-    }, 500);
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
   };
 
-  checkPopup();
-  */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted with email:", email);
+    const user = faculty.find((f) => f.Id === selectedUserId);
 
-    // Redirect to /admin_dashboard if email is valid
-    if (email) {
-      navigate("/adminDashboard"); // Redirect to the dashboard
+    if (user) {
+      if (user.IsAdmin) {
+        setShowPasswordModal(true);
+      } else {
+        setCurrentUser(user);
+        navigate(user.IsReviewer ? "/reviewerDashboard" : "/facultyDashboard");
+      }
     } else {
-      console.log("Please enter a valid email.");
+      console.log("Please select a user.");
     }
+  };
+
+  const handleAdminLogin = () => {
+    if (password === "adminPassword") {
+      const user = faculty.find((f) => f.Id === selectedUserId);
+      if (user) {
+        setCurrentUser(user);
+        navigate("/adminDashboard");
+      }
+    } else {
+      console.log("Incorrect password.");
+    }
+    setShowPasswordModal(false);
   };
 
   return (
     <LoginContainer>
       <StyledForm onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={handleEmailChange}
-          />
+        <Form.Group className="mb-3" controlId="formBasicSelect">
+          <Form.Label>Select User</Form.Label>
+          <Form.Select value={selectedUserId || ""} onChange={handleUserChange}>
+            <option value="">Select a user...</option>
+            {faculty.map((f) => (
+              <option key={f.Id} value={f.Id}>
+                {f.Name}
+              </option>
+            ))}
+          </Form.Select>
         </Form.Group>
         <Button variant="primary" type="submit">
           Sign In
         </Button>
       </StyledForm>
+
+      <Modal
+        show={showPasswordModal}
+        onHide={() => setShowPasswordModal(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Admin Login</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group controlId="formPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowPasswordModal(false)}
+          >
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleAdminLogin}>
+            Login
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </LoginContainer>
   );
 };

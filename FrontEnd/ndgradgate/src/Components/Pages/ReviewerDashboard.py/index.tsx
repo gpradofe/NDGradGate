@@ -29,8 +29,8 @@ const ReviewerOverviewPage: React.FC = () => {
   };
 
   const facultyOptions = faculty.map((fac) => ({
-    label: fac.name,
-    value: fac.id,
+    label: fac.Name,
+    value: fac.Id,
   }));
 
   return (

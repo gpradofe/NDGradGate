@@ -11,6 +11,7 @@ namespace ND.GradGate.Kernel.StartupConfiguration
         {
             services.AddTransient(typeof(IApplicantRepository), typeof(ApplicantRepository));
             services.AddTransient(typeof(IFacultyRepository), typeof(FacultyRepository));
+            services.AddTransient(typeof(ISettingRepository), typeof(SettingRepository));
 
         }
         #endregion

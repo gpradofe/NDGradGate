@@ -17,22 +17,6 @@ const AnalyticsDashboard: React.FC = () => {
     ],
   };
 
-  const ethnicityDataCurrent = {
-    labels: ["Asian", "Black", "Hispanic", "White", "Other"],
-    datasets: [
-      {
-        backgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-        ],
-        data: [300, 100, 150, 400, 50],
-      },
-    ],
-  };
-
   const acceptanceRateData = {
     labels: ["2018", "2019", "2020", "2021", "2022"],
     datasets: [
@@ -71,8 +55,6 @@ const AnalyticsDashboard: React.FC = () => {
     ],
   };
 
-  // Additional data sets can be defined similarly
-
   return (
     <DashboardContainer>
       <Container fluid>
@@ -82,13 +64,6 @@ const AnalyticsDashboard: React.FC = () => {
             <ChartContainer>
               <Card title="Application Trends">
                 <Chart type="bar" data={applicationTrendsData} />
-              </Card>
-            </ChartContainer>
-          </Col>
-          <Col md={6}>
-            <ChartContainer>
-              <Card title="Ethnicity Distribution">
-                <Chart type="pie" data={ethnicityDataCurrent} />
               </Card>
             </ChartContainer>
           </Col>

@@ -12,5 +12,7 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories.Interfaces
     {
         Task<Faculty> GetByFacultyIdAsync(int Id);
         Task<List<Faculty>> GetByFacultyNameAsync(string name);
+        Task<List<Faculty>> GetAllFacultyAsync();
+
     }
 }

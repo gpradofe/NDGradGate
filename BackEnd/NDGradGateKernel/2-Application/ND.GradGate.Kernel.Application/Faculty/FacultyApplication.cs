@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using ND.GradGate.Kernel.Application.Faculty.Interfaces.Actions;
 using ND.GradGate.Kernel.Application.Facultys.Actions;
 using ND.GradGate.Kernel.Application.Facultys.Interfaces;
 using ND.GradGate.Kernel.Application.Facultys.Interfaces.Actions;
@@ -17,16 +18,19 @@ namespace ND.GradGate.Kernel.Application.Facultys
         private readonly ILogger<FacultyApplication> _logger;
         private readonly IGetFacultyInfoByIdAction _getFacultyInfoByIdAction;
         private readonly IGetFacultysInfoByNameAction _getFacultysInfoByNameAction;
+        private readonly IGetAllFacultyAction _getAllFacultyAction;
         #endregion
 
         #region Constructors
         public FacultyApplication(ILogger<FacultyApplication> logger,
                                     IGetFacultyInfoByIdAction getFacultyInfoByIdAction,
-                                    IGetFacultysInfoByNameAction getFacultysInfoByNameAction)
+                                    IGetFacultysInfoByNameAction getFacultysInfoByNameAction,
+                                    IGetAllFacultyAction getAllFacultyAction)
         {
             _logger = logger;
             _getFacultyInfoByIdAction = getFacultyInfoByIdAction;
             _getFacultysInfoByNameAction = getFacultysInfoByNameAction;
+            _getAllFacultyAction = getAllFacultyAction;
         }
         #endregion
 
@@ -47,7 +51,22 @@ namespace ND.GradGate.Kernel.Application.Facultys
                 throw;
             }
         }
+        public async Task<List<FacultyDto>> GetAllFaculty()
+        {
+            try
+            {
+                _logger.LogInformation($"Fetching All Faculty.");
 
+                List<FacultyDto> response = await _getAllFacultyAction.GetAllFaculty();
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+        }
         public async Task<List<FacultyDto>> GetFacultysByNameAsync(string name)
         {
             try
