@@ -15,6 +15,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import styled from "styled-components";
 import SideBar from "./Components/Organisms/SideBar";
@@ -28,6 +29,7 @@ import {
   ApplicationProvider,
   useApplicationContext,
 } from "./context/ApplicationContext";
+import { ToastContainer } from "react-toastify";
 
 function MainContent() {
   const { currentUser } = useApplicationContext();
@@ -109,6 +111,7 @@ function App() {
       <Router>
         <MainContent />
       </Router>
+      <ToastContainer />
     </ApplicationProvider>
   );
 }

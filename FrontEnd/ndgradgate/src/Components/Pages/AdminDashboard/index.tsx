@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Container,
   Tab,
@@ -11,135 +11,48 @@ import {
   ListItem,
 } from "@mui/material";
 import { DashboardContainer, Header, StyledButton } from "./styles";
-import styled from "styled-components";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { InputText } from "primereact/inputtext";
 import { useApplicationContext } from "../../../context/ApplicationContext";
-import { Faculty } from "../../../types/Application/Faculty";
-import { Checkbox } from "primereact/checkbox";
 import { Setting } from "../../../types/Settings/Setting";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-// Extend existing styled components
-const TabPanelContainer = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-`;
-
-// Helper component for TabPanel
-function TabPanel(props: {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <TabPanelContainer>{children}</TabPanelContainer>}
-    </div>
-  );
-}
+import FacultyManagementGrid from "../../Atoms/FacultyManagementGrid";
+import { FormControl } from "react-bootstrap";
+import { TabPanel } from "../../../Helpers/TabPanelHelper";
+import { toast } from "react-toastify";
 
 // AdminDashboard Component
 const AdminDashboard: React.FC = () => {
+  const tabIndexRef = useRef(0);
   const [tabIndex, setTabIndex] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { faculty, fetchFaculty, settings, fetchSettings, addOrUpdateSetting } =
+  const { settings, fetchSettings, addOrUpdateSetting } =
     useApplicationContext();
-  const [first, setFirst] = useState(0);
-  const [totalRecords, setTotalRecords] = useState(faculty.length);
+  const [editedSettings, setEditedSettings] = useState<{
+    [key: number]: string[];
+  }>({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [localFaculty, setLocalFaculty] = useState<Faculty[]>(faculty);
-  const [addedFaculty, setAddedFaculty] = useState<Faculty[]>([]);
-  const [updatedFaculty, setUpdatedFaculty] = useState<Faculty[]>([]);
-  const [deletedFacultyIds, setDeletedFacultyIds] = useState<number[]>([]);
-  const [isDataChanged, setIsDataChanged] = useState(false);
+  const [changedSettingIds, setChangedSettingIds] = useState<Set<number>>(
+    new Set()
+  );
 
   const [localSettings, setLocalSettings] = useState(settings);
   const [isSettingsChanged, setIsSettingsChanged] = useState(false);
   const [expandedPanel, setExpandedPanel] = useState<string | false>(false);
-  const [editedSettings, setEditedSettings] = useState<{
-    [key: number]: string[];
-  }>({});
 
   const handlePanelChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpandedPanel(isExpanded ? panel : false);
     };
-  useEffect(() => {
-    setLocalFaculty(faculty);
-    setTotalRecords(faculty.length);
-  }, [faculty]);
+
   useEffect(() => {
     setLocalSettings(settings);
   }, [settings]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    console.log("handleTabChange - New Tab Index:", newValue);
+    tabIndexRef.current = newValue;
     setTabIndex(newValue);
   };
-  const onPageChange = (event: any) => {
-    setFirst(event.first);
-    setRowsPerPage(event.rows);
-  };
 
-  const onRowEditComplete = (e: any) => {
-    const updatedFaculty = e.newData;
-    setUpdatedFaculty((prev) => [
-      ...prev.filter((f) => f.Id !== updatedFaculty.Id),
-      updatedFaculty,
-    ]);
-
-    // Update the localFaculty state
-    setLocalFaculty((prev) =>
-      prev.map((f) => (f.Id === updatedFaculty.Id ? updatedFaculty : f))
-    );
-    setIsDataChanged(true);
-  };
-  const addNewFaculty = () => {
-    const newFaculty: Faculty = {
-      Id: Math.max(0, ...localFaculty.map((f) => f.Id)) + 1,
-      Name: "",
-      Email: "",
-      IsAdmin: false,
-      IsReviewer: false,
-      Field: "",
-      PotentialAdvisors: [],
-      ReviewerAssignments: [],
-      Comments: [],
-    };
-
-    setAddedFaculty((prev) => [...prev, newFaculty]);
-    setLocalFaculty((prev) => [...prev, newFaculty]);
-    setIsDataChanged(true);
-  };
-
-  const deleteFaculty = (id: number) => {
-    setDeletedFacultyIds((prev) => [...prev, id]);
-    setLocalFaculty((prev) => prev.filter((f) => f.Id !== id));
-    setIsDataChanged(true);
-  };
-
-  const revertChanges = async () => {
-    await fetchFaculty();
-    setAddedFaculty([]);
-    setUpdatedFaculty([]);
-    setDeletedFacultyIds([]);
-    setIsDataChanged(false);
-  };
-  const reviewerBodyTemplate = (reviewer: Faculty) => {
-    return <Checkbox checked={reviewer.IsReviewer} />;
-  };
   const handleAddSetting = (newSetting: Setting) => {
     setLocalSettings([...localSettings, newSetting]);
     setIsSettingsChanged(true);
@@ -153,62 +66,93 @@ const AdminDashboard: React.FC = () => {
     );
     setIsSettingsChanged(true);
   };
+  const handleDeleteSettingValue = (settingId: number, valueIndex: number) => {
+    // Update localSettings to remove the value at the specified index
+    const updatedLocalSettings = localSettings.map((setting) => {
+      if (setting.Id === settingId) {
+        const updatedValues = [...setting.Values];
+        updatedValues.splice(valueIndex, 1); // Remove the value at the index
+        return { ...setting, Values: updatedValues };
+      }
+      return setting;
+    });
 
-  const handleDeleteSetting = (settingId: number) => {
-    setLocalSettings(localSettings.filter((s) => s.Id !== settingId));
-    setIsSettingsChanged(true);
+    setLocalSettings(updatedLocalSettings);
+    setChangedSettingIds(new Set(changedSettingIds.add(settingId)));
   };
   const handleSettingValueChange = (
     settingId: number,
-    value: string[],
-    index: number
+    newValue: string,
+    valueIndex: number
   ) => {
-    const updatedSettings = { ...editedSettings, [settingId]: value };
-    setEditedSettings(updatedSettings);
-  };
-  const applySettingChanges = async (settingId: number) => {
-    await addOrUpdateSetting(localSettings.find((s) => s.Id === settingId)!);
+    // Find the setting and update its values
+    const updatedLocalSettings = localSettings.map((s) => {
+      if (s.Id === settingId) {
+        const updatedValues = [...s.Values];
+        updatedValues[valueIndex] = newValue;
+        return { ...s, Values: updatedValues };
+      }
+      return s;
+    });
 
-    await fetchSettings();
-    setIsSettingsChanged(false);
-  };
+    setLocalSettings(updatedLocalSettings);
 
-  const revertSettingChanges = (settingId: number) => {
-    setLocalSettings(settings);
-    setIsSettingsChanged(false);
+    // Mark this setting ID as changed
+    setChangedSettingIds(new Set(changedSettingIds.add(settingId)));
   };
-  const actionBodyTemplate = (rowData: Faculty) => (
-    <StyledButton variant="danger" onClick={() => deleteFaculty(rowData.Id)}>
-      Delete
-    </StyledButton>
-  );
+  const applySettingChanges = async (
+    settingId: number,
+    event: React.SyntheticEvent
+  ) => {
+    console.log("applySettingChanges - Current Tab Index:", tabIndex);
 
-  const textEditor = (options: any) => (
-    <InputText
-      type="text"
-      value={options.value}
-      onChange={(e) => options.editorCallback(e.target.value)}
-    />
-  );
-  const reviewerEditor = (options: any) => {
-    return (
-      <Checkbox
-        checked={options.rowData.IsReviewer}
-        onChange={(e) => options.editorCallback(e.checked)}
-      />
-    );
-  };
-  const applyChanges = async () => {
-    try {
-      await fetchFaculty();
+    event.preventDefault();
+    setIsLoading(true);
+    const settingToUpdate = localSettings.find((s) => s.Id === settingId);
+    if (settingToUpdate) {
+      settingToUpdate.Values =
+        editedSettings[settingId] || settingToUpdate.Values;
 
-      setAddedFaculty([]);
-      setUpdatedFaculty([]);
-      setDeletedFacultyIds([]);
-      setIsDataChanged(false);
-    } catch (error) {
-      console.error("Error applying changes:", error);
+      try {
+        await addOrUpdateSetting(settingToUpdate);
+        await fetchSettings();
+        toast.success(
+          `Setting "${settingToUpdate.SettingKey}" updated successfully.`
+        );
+        setEditedSettings({});
+        setChangedSettingIds(new Set());
+      } catch (error) {
+        console.error("Error applying setting changes:", error);
+        toast.error("Error updating setting.");
+      }
     }
+    setIsLoading(false);
+  };
+
+  const handleAddNewSettingValue = (settingId: number) => {
+    const updatedLocalSettings = localSettings.map((s) => {
+      if (s.Id === settingId) {
+        return { ...s, Values: [...s.Values, ""] };
+      }
+      return s;
+    });
+
+    setLocalSettings(updatedLocalSettings);
+    // Mark this setting ID as changed
+    setChangedSettingIds(new Set(changedSettingIds.add(settingId)));
+  };
+  const revertSettingChanges = (
+    settingId: number,
+    event: React.SyntheticEvent
+  ) => {
+    event.preventDefault();
+
+    setLocalSettings(settings);
+    setEditedSettings({});
+    const newChangedSettingIds = new Set(changedSettingIds);
+    newChangedSettingIds.delete(settingId);
+    setChangedSettingIds(newChangedSettingIds);
+    toast.info("Changes reverted.");
   };
 
   return (
@@ -224,109 +168,81 @@ const AdminDashboard: React.FC = () => {
           <Tab label="Settings" />
         </Tabs>
 
-        <TabPanel value={tabIndex} index={0}>
-          <h3>Faculty Management</h3>
+        <FacultyManagementGrid valueTabIndex={tabIndex} index={0} />
 
-          <DataTable
-            value={localFaculty}
-            paginator
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            first={first}
-            rows={rowsPerPage}
-            totalRecords={totalRecords}
-            onPage={onPageChange}
-            rowsPerPageOptions={[5, 10, 20, 50]}
-            editMode="row"
-            onRowEditComplete={onRowEditComplete}
-            dataKey="Id"
-          >
-            <Column field="Id" header="ID" />
-            <Column field="Name" header="Name" editor={textEditor} />
-            <Column
-              field="IsReviewer"
-              header="Is Reviewer"
-              editor={reviewerEditor}
-              body={reviewerBodyTemplate}
-            />
-
-            <Column body={actionBodyTemplate} />
-            <Column rowEditor />
-          </DataTable>
-          <StyledButton variant="primary" onClick={addNewFaculty}>
-            Add New Faculty
-          </StyledButton>
-          {isDataChanged && (
-            <>
-              <StyledButton variant="secondary" onClick={revertChanges}>
-                Revert Changes
-              </StyledButton>
-              <StyledButton variant="success" onClick={applyChanges}>
-                Apply Changes
-              </StyledButton>
-            </>
-          )}
-        </TabPanel>
         <TabPanel value={tabIndex} index={1}>
           <h3>Settings</h3>
-          {localSettings &&
-            localSettings.map((setting, index) => {
-              console.log("setting (Accordion):", setting);
-              return (
-                <Accordion
-                  key={setting.Id}
-                  expanded={expandedPanel === `panel${index}`}
-                  onChange={handlePanelChange(`panel${index}`)}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={`panel${index}bh-content`}
-                    id={`panel${index}bh-header`}
-                  >
-                    <Typography>{setting.SettingKey}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <List>
-                      {setting.Values &&
-                        setting.Values.map((value, valueIndex) => {
-                          console.log("setting (ListItem):", setting); // Add this line for logging inside the ListItem
-                          console.log("value:", value); // Add this line for logging
-
-                          return (
-                            <ListItem key={valueIndex}>
-                              <InputText
-                                value={
-                                  editedSettings[setting.Id]?.[valueIndex] ||
-                                  value
-                                }
-                                onChange={(e) =>
-                                  handleSettingValueChange(
-                                    setting.Id,
-                                    [
-                                      ...setting.Values.slice(0, valueIndex),
-                                      e.target.value,
-                                      ...setting.Values.slice(valueIndex + 1),
-                                    ],
-                                    valueIndex
-                                  )
-                                }
-                              />
-                            </ListItem>
-                          );
-                        })}
-                    </List>
-                    <StyledButton variant="secondary" onClick={revertChanges}>
+          {localSettings.map((setting, index) => (
+            <Accordion
+              key={setting.Id}
+              expanded={expandedPanel === `panel${index}`}
+              onChange={handlePanelChange(`panel${index}`)}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`panel${index}bh-content`}
+                id={`panel${index}bh-header`}
+              >
+                <Typography>{setting.SettingKey}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <List>
+                  {setting.Values.map((value, valueIndex) => (
+                    <ListItem key={valueIndex}>
+                      <FormControl
+                        as="textarea"
+                        value={
+                          editedSettings[setting.Id]?.[valueIndex] || value
+                        }
+                        onChange={(e) =>
+                          handleSettingValueChange(
+                            setting.Id,
+                            e.target.value,
+                            valueIndex
+                          )
+                        }
+                      />
+                      <StyledButton
+                        variant="danger"
+                        onClick={() =>
+                          handleDeleteSettingValue(setting.Id, valueIndex)
+                        }
+                      >
+                        Delete
+                      </StyledButton>
+                    </ListItem>
+                  ))}
+                  <ListItem>
+                    <StyledButton
+                      variant="primary"
+                      onClick={() => handleAddNewSettingValue(setting.Id)}
+                    >
+                      Add New Value
+                    </StyledButton>
+                  </ListItem>
+                </List>
+                {changedSettingIds.has(setting.Id) && (
+                  <>
+                    <StyledButton
+                      variant="secondary"
+                      onClick={(e: any) => revertSettingChanges(setting.Id, e)}
+                    >
                       Revert Changes
                     </StyledButton>
-                    <StyledButton variant="success" onClick={applyChanges}>
+                    <StyledButton
+                      variant="success"
+                      onClick={(e: any) => applySettingChanges(setting.Id, e)}
+                    >
                       Apply Changes
                     </StyledButton>
-                  </AccordionDetails>
-                </Accordion>
-              );
-            })}
+                  </>
+                )}
+              </AccordionDetails>
+            </Accordion>
+          ))}
         </TabPanel>
       </Container>
+      {isLoading && <p>Loading...</p>}
     </DashboardContainer>
   );
 };

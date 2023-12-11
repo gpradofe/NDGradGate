@@ -35,7 +35,7 @@ namespace ND.GradGate.Kernel.Controllers
                 {
                     return NoContent();
                 }
-            }
+            } 
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error on GetAllSettings");

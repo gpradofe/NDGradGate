@@ -47,9 +47,20 @@ class ApiService {
   }
   public async addOrUpdateSetting(setting: Setting): Promise<Setting> {
     try {
+      const payload = {
+        Id: setting.Id,
+        SettingKey: setting.SettingKey,
+        Values: setting.Values,
+      };
+      console.log("Payload:", payload);
       const response = await axios.post<Setting>(
         `${this.baseURL}Setting/AddOrUpdateSetting`,
-        setting
+        JSON.stringify(payload),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
       console.log("Setting added/updated:", response.data);
       return response.data;
