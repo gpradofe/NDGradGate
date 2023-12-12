@@ -54,12 +54,12 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
                 Ethnicity = applicant.Ethnicity,
                 CitizenshipCountry = applicant.Country,
                 AreaOfStudy = applicant.Field,
-                ApplicationStatus = applicant.Decision,
+                CurrentDecision = applicant.Decision,
+                Status = applicant.Status,
                 AcademicHistories = MapToAcademicHistoryDtoList(applicant.AcademicHistories),
                 FacultyAdvisors = MapToFacultyAdvisorDtoList(applicant.PotentialAdvisors),
                 Reviewers = MapToReviewerDtoList(applicant.ReviewerAssignments),
                 Attributes = MapToApplicantAttributeDtoList(applicant.ApplicantAttributes),
-                Comments = MapToCommentDtoList(applicant.Comments)
             };
         }
 
@@ -77,17 +77,18 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
         {
             return potentialAdvisors?.Select(pa => new FacultyAdvisorDto
             {
-                Name = pa.Faculty?.Name
-            }).Where(fa => fa.Name != null).ToList() ?? new List<FacultyAdvisorDto>();
+                Id  = pa.FacultyId,
+            }).ToList() ?? new List<FacultyAdvisorDto>();
         }
 
         private List<ReviewerDto> MapToReviewerDtoList(ICollection<ReviewerAssignment> reviewerAssignments)
         {
-            return reviewerAssignments?.Select(ra => new ReviewerDto
+            var x = reviewerAssignments?.Select(ra => new ReviewerDto
             {
-                Name = ra.Faculty?.Name,
+                FacultyId = ra.FacultyId,
                 Recommendation = ra.Status
-            }).Where(r => r.Name != null).ToList() ?? new List<ReviewerDto>();
+            }).ToList() ?? new List<ReviewerDto>();
+            return x;
         }
 
         private List<ApplicantAttributeDto> MapToApplicantAttributeDtoList(ICollection<ApplicantAttribute> applicantAttributes)
@@ -100,14 +101,6 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
             }).ToList() ?? new List<ApplicantAttributeDto>();
         }
 
-        private List<CommentDto> MapToCommentDtoList(ICollection<Comment> comments)
-        {
-            // Assuming CommentDto exists and has properties for Content and Date
-            return comments?.Select(c => new CommentDto
-            {
-                Content = c.Content,
-                Date = c.Date
-            }).ToList() ?? new List<CommentDto>();
-        }
+
     }
 }

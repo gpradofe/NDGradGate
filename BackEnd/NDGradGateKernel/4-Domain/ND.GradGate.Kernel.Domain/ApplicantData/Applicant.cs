@@ -10,11 +10,12 @@ namespace ND.GradGate.Kernel.Domain.ApplicantData
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public string Sex { get; set; }
-        public string Ethnicity { get; set; }
-        public string Country { get; set; }
-        public string Field { get; set; }
-        public string Decision { get; set; }
+        public string? Sex { get; set; }
+        public string? Ethnicity { get; set; }
+        public string? Country { get; set; }
+        public string? Field { get; set; }
+        public string? Decision { get; set; }
+        public string? Status { get; set; }
 
         // Relationships
         public virtual ICollection<AcademicHistory> AcademicHistories { get; set; }

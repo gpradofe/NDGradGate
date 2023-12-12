@@ -19,6 +19,7 @@ namespace ND.GradGate.Kernel.Application.Applicants
         private readonly IGetApplicantsInfoByNameAction _getApplicantsInfoByNameAction;
         private readonly IGetAllApplicantsAction _getAllApplicantsAction;
         private readonly IUpdateApplicantInfoByIdAction _updateApplicantInfoByIdAction;
+        private readonly IUpdateApplicantStatusAndReviewerAction _updateApplicantStatusAndReviewerAction;
         private readonly ICreateApplicantInfoAction _createApplicantInfoByIdAction;
         private readonly IDeleteApplicantInfoByIdAction _deleteApplicantInfoByIdAction;
         #endregion
@@ -30,7 +31,8 @@ namespace ND.GradGate.Kernel.Application.Applicants
                                     IUpdateApplicantInfoByIdAction updateApplicantInfoByIdAction,
                                     IDeleteApplicantInfoByIdAction deleteApplicantInfoById,
                                     IGetAllApplicantsAction getAllApplicantsAction,
-                                    ICreateApplicantInfoAction createApplicantInfoAction)
+                                    ICreateApplicantInfoAction createApplicantInfoAction, 
+                                    IUpdateApplicantStatusAndReviewerAction updateApplicantStatusAndReviewerAction)
         {
             _logger = logger;
             _getApplicantInfoByIdAction = getApplicantInfoByIdAction;
@@ -39,6 +41,7 @@ namespace ND.GradGate.Kernel.Application.Applicants
             _deleteApplicantInfoByIdAction = deleteApplicantInfoById;
             _updateApplicantInfoByIdAction = updateApplicantInfoByIdAction;
             _getAllApplicantsAction = getAllApplicantsAction;
+            _updateApplicantStatusAndReviewerAction = updateApplicantStatusAndReviewerAction;
         }
         #endregion
 
@@ -155,6 +158,28 @@ namespace ND.GradGate.Kernel.Application.Applicants
             {
                 _logger.LogError(ex, $"An error occurred while attempting to delete applicant data with RefID: {refId}. Error: {ex.Message}");
                 return false;
+            }
+        }
+
+        public async Task<bool> UpdateApplicantStatusAndReviewerAsync(List<UpdateApplicantStatusAndReviewerDto> updateApplicantStatusAndReviewerDtos)
+        {
+            try
+            {
+                _logger.LogInformation($"Updating applicant data @{updateApplicantStatusAndReviewerDtos}.");
+
+                var updatedApplicant = await _updateApplicantStatusAndReviewerAction.UpdateApplicantInfoAsync(updateApplicantStatusAndReviewerDtos);
+
+                if (updatedApplicant == null)
+                {
+                    _logger.LogError($"Failed to update applicants  {updateApplicantStatusAndReviewerDtos}.");
+                }
+
+                return updatedApplicant;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
             }
         }
         #endregion

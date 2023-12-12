@@ -1,80 +1,66 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState, useMemo, ChangeEvent } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { DashboardContainer, Header, Section } from "./styles";
 import { Toast } from "primereact/toast";
 import DataGrid from "../../../Atoms/DataGrid";
 import { useApplicationContext } from "../../../../context/ApplicationContext";
+import Papa from "papaparse";
+import ImportedDataGrid from "../../../Atoms/ImportedDataGrid";
+import { Dialog } from "primereact/dialog";
+type CSVData = Record<string, string | number>;
 
 const ApplicantOverview: React.FC = () => {
-  const { applications, faculty } = useApplicationContext();
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [visibleColumns, setVisibleColumns] = useState<{
-    [key: string]: boolean;
-  }>({
-    FirstName: true,
-    LastName: true,
-    Email: true,
-    ApplicationStatus: false,
-    AreaOfStudy: true,
-    CitizenshipCountry: true,
-    DepartmentRecommendation: false,
-    Ethnicity: false,
-    Sex: false,
-    AcademicHistories: false,
-  });
-  const toast = useRef<Toast>(null);
+  const [importedData, setImportedData] = useState<CSVData[]>([]);
+  const [isImportDialogVisible, setIsImportDialogVisible] = useState(false);
 
-  const showSuccess = (message: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: message,
-      life: 3000,
-    });
+  const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          setImportedData(results.data as CSVData[]);
+          setIsImportDialogVisible(true);
+        },
+      });
+    }
   };
 
-  const assignReviewer = (applicationRef: number, reviewerId: number) => {
-    console.log(
-      `Assign reviewer ${reviewerId} to application ${applicationRef}`
+  const renderImportDialog = () => {
+    return (
+      <Dialog
+        header="Imported Data"
+        visible={isImportDialogVisible}
+        style={{ width: "80%" }}
+        onHide={() => setIsImportDialogVisible(false)}
+      >
+        <ImportedDataGrid data={importedData} />
+      </Dialog>
     );
   };
-
-  const updateApplicationStatus = (applicationRef: number, status: string) => {
-    console.log(`Update application ${applicationRef} status to ${status}`);
-  };
-
-  const filteredApplications = useMemo(() => {
-    return applications.filter((application) =>
-      Object.values(application).some((value) =>
-        value.toString().toLowerCase().includes(globalFilter.toLowerCase())
-      )
-    );
-  }, [applications, globalFilter]);
-
-  const facultyOptions = faculty.map((fac) => ({
-    label: fac.Name,
-    value: fac.Id,
-  }));
 
   return (
     <DashboardContainer>
-      <Toast ref={toast} />
       <Container fluid>
         <Row>
           <Col md={12}>
             <Section>
               <Header>Application Overview</Header>
-              <DataGrid
-                data={filteredApplications}
-                globalFilter={globalFilter}
-                onGlobalFilterChange={(e) => setGlobalFilter(e.target.value)}
-                onAssignReviewer={assignReviewer}
-                onUpdateApplicationStatus={updateApplicationStatus}
-                facultyOptions={facultyOptions}
-                visibleColumns={visibleColumns}
-                setVisibleColumns={setVisibleColumns}
-                showSuccess={showSuccess}
+              <button
+                onClick={() => document.getElementById("csvInput")?.click()}
+              >
+                Import CSV
+              </button>
+              <input
+                id="csvInput"
+                type="file"
+                accept=".csv"
+                style={{ display: "none" }}
+                onChange={handleFileSelect}
               />
+              <DataGrid />
+              {renderImportDialog()}
             </Section>
           </Col>
         </Row>

@@ -52,7 +52,7 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
                 Ethnicity = dto.Ethnicity,
                 Country = dto.CitizenshipCountry,
                 Field = dto.AreaOfStudy,
-                Decision = dto.ApplicationStatus,
+                Decision = dto.CurrentDecision,
 
                 AcademicHistories = dto.AcademicHistories?.Select(historyDto => new AcademicHistory
                 {

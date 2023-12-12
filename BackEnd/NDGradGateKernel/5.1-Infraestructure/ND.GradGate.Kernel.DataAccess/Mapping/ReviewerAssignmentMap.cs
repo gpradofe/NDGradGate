@@ -23,7 +23,6 @@ namespace ND.GradGate.Kernel.DataAccess.Mapping
             builder.Property(ra => ra.CommentId).HasColumnName("comment_id"); // Optional
             builder.Property(ra => ra.Status).HasColumnName("status");
 
-            // Relationships
             builder.HasOne(ra => ra.Faculty)
                    .WithMany(f => f.ReviewerAssignments)
                    .HasForeignKey(ra => ra.FacultyId);

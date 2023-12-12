@@ -46,7 +46,7 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
                     Ethnicity = applicant.Ethnicity,
                     CitizenshipCountry = applicant.Country,
                     AreaOfStudy = applicant.Field,
-                    ApplicationStatus = applicant.Decision,
+                    CurrentDecision = applicant.Decision,
                     DepartmentRecommendation = applicant.Decision,
                     AcademicHistories = applicant.AcademicHistories.Select(ah => new AcademicHistoryDto
                     {
@@ -60,7 +60,6 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
                     }).ToList(),
                     Reviewers = applicant.ReviewerAssignments.Select(ra => new ReviewerDto
                     {
-                        Name = ra.Faculty.Name,
                         Recommendation = ra.Status
                     }).ToList()
                 }).ToList();

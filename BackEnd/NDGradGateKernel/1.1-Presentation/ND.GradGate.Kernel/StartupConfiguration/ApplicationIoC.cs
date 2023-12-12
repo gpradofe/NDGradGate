@@ -30,6 +30,7 @@ namespace ND.GradGate.Kernel.StartupConfiguration
             services.AddSingleton<IGetApplicantInfoByIdAction, GetApplicantInfoByIdAction>();
             services.AddSingleton<IGetAllApplicantsAction, GetAllApplicantsAction>();
             services.AddSingleton<IUpdateApplicantInfoByIdAction, UpdateApplicantInfoByIdAction>();
+            services.AddSingleton<IUpdateApplicantStatusAndReviewerAction, UpdateApplicantStatusAndReviewerAction>();
             services.AddSingleton<ICreateApplicantInfoAction, CreateApplicantInfoAction>();
             services.AddSingleton<IDeleteApplicantInfoByIdAction, DeleteApplicantInfoByIdAction>();
 

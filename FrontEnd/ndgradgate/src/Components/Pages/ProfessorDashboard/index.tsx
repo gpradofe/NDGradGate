@@ -9,12 +9,18 @@ const FacultyDashboard: React.FC = () => {
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [faculty, setFaculty] = useState<Faculty>(/* Your faculty data here */);
 
-  const handleAdvisorAcceptance = (applicantRef: number, facultyId: number) => {
+  const handleAdvisorAcceptance = (
+    applicantRef: number,
+    facultyName: string
+  ) => {
     // Logic to accept the advisor role
     console.log(`Accept advisor role for applicant ${applicantRef}`);
   };
 
-  const handleAdvisorRejection = (applicantRef: number, facultyId: number) => {
+  const handleAdvisorRejection = (
+    applicantRef: number,
+    facultyName: string
+  ) => {
     // Logic to reject the advisor role
     console.log(`Reject advisor role for applicant ${applicantRef}`);
   };

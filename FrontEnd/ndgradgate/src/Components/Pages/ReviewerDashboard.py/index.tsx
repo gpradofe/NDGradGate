@@ -13,9 +13,12 @@ const ReviewerOverviewPage: React.FC = () => {
   const [faculty, setFaculty] = useState<Faculty[]>([]);
   const toast = useRef<Toast>(null);
 
-  const recommendFaculties = (applicationRef: number, facultyIds: number[]) => {
+  const recommendFaculties = (
+    applicationRef: number,
+    facultyNames: string[]
+  ) => {
     console.log(
-      `Recommend faculties ${facultyIds} for application ${applicationRef}`
+      `Recommend faculties ${facultyNames} for application ${applicationRef}`
     );
   };
 

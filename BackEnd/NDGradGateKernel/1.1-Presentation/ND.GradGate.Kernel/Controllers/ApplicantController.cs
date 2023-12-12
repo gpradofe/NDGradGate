@@ -193,7 +193,29 @@ namespace ND.GradGate.Kernel.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
             }
         }
+        [HttpPut("UpdateApplicantStatusAndReviewer")]
+        public async Task<IActionResult> UpdateApplicantStatus(List<UpdateApplicantStatusAndReviewerDto> applicantUpdateDto)
+        {
+            try
+            {
 
+
+                bool result = await _applicantApplication.UpdateApplicantStatusAndReviewerAsync(applicantUpdateDto);
+                if (!result)
+                {
+                    // Log the error or handle the case where the deletion is not successful
+                    _logger.LogError($"Failed to update status of applicants: {applicantUpdateDto}.");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while deleting the applicant.");
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while updating applicants: {applicantUpdateDto}: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
+            }
+        }
 
         #endregion
     }

@@ -5,8 +5,8 @@ import { Applicant } from "../../../types/Application/Applicant";
 
 interface DataGridProps {
   data: Applicant[];
-  onAdvisorAcceptance: (applicationRef: number, facultyId: number) => void;
-  onAdvisorRejection: (applicationRef: number, facultyId: number) => void;
+  onAdvisorAcceptance: (applicationRef: number, facultyName: string) => void;
+  onAdvisorRejection: (applicationRef: number, facultyName: string) => void;
 }
 
 const FacultyDataGrid: React.FC<DataGridProps> = ({
@@ -17,11 +17,11 @@ const FacultyDataGrid: React.FC<DataGridProps> = ({
   const renderAdvisorDecision = (rowData: Applicant) => {
     return rowData.FacultyAdvisors.map((advisor, index) => (
       <div key={index}>
-        {advisor.name}
-        <button onClick={() => onAdvisorAcceptance(rowData.Ref, advisor.id)}>
+        {advisor.Name}
+        <button onClick={() => onAdvisorAcceptance(rowData.Ref, advisor.Name)}>
           Accept
         </button>
-        <button onClick={() => onAdvisorRejection(rowData.Ref, advisor.id)}>
+        <button onClick={() => onAdvisorRejection(rowData.Ref, advisor.Name)}>
           Reject
         </button>
       </div>

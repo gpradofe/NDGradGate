@@ -214,10 +214,28 @@ namespace ND.GradGate.Kernel.DataAccess.Persistent.Repositories
                     DbContext dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
                     DbSet<T> dataset = dbContext.Set<T>();
 
-                    dataset.Update(entity);
+                    // Check if the entity is being tracked
+                    var entry = dbContext.Entry(entity);
+                    if (entry.State == EntityState.Detached)
+                    {
+                        dataset.Attach(entity);
+                    }
 
-                    await dbContext.SaveChangesAsync();
 
+                    using (var transaction = dbContext.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            dataset.Update(entity);
+                            await dbContext.SaveChangesAsync();
+                            transaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -227,6 +245,7 @@ namespace ND.GradGate.Kernel.DataAccess.Persistent.Repositories
             }
             return entity;
         }
+
         public async Task<IList<T>> UpdateListAsync(IList<T> entities)
         {
             ConcurrentQueue<Exception> exceptions = new ConcurrentQueue<Exception>();

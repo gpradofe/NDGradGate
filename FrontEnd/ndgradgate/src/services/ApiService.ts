@@ -69,6 +69,25 @@ class ApiService {
       throw error;
     }
   }
+  public async updateApplicantStatusAndReviewer(
+    updateData: Array<{ Ref: number; FacultyId: Array<number>; Status: string }>
+  ): Promise<void> {
+    try {
+      const response = await axios.put(
+        `${this.baseURL}Applicant/UpdateApplicantStatusAndReviewer`,
+        JSON.stringify(updateData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Applicant status and reviewer updated:", response.data);
+    } catch (error) {
+      console.error("Error updating applicant status and reviewer:", error);
+      throw error;
+    }
+  }
 }
 
 const apiServiceInstance = new ApiService();

@@ -23,6 +23,9 @@ interface ApplicationContextProps {
   settings: Setting[];
   fetchSettings: () => void;
   addOrUpdateSetting: (setting: Setting) => void;
+  updateApplicantStatusAndReviewer: (
+    updateData: Array<{ Ref: number; FacultyId: Array<number>; Status: string }>
+  ) => Promise<void>;
 }
 
 interface ApplicationProviderProps {
@@ -95,7 +98,16 @@ export const ApplicationProvider: React.FC<ApplicationProviderProps> = ({
       console.error("Error fetching settings:", error);
     }
   };
-
+  const updateApplicantStatusAndReviewer = async (
+    updateData: Array<{ Ref: number; FacultyId: Array<number>; Status: string }>
+  ) => {
+    try {
+      await apiServiceInstance.updateApplicantStatusAndReviewer(updateData);
+      fetchApplications(); // Refetch applications after update
+    } catch (error) {
+      console.error("Error updating applicant status and reviewer:", error);
+    }
+  };
   const addOrUpdateSetting = async (setting: Setting) => {
     try {
       await apiServiceInstance.addOrUpdateSetting(setting);
@@ -125,6 +137,7 @@ export const ApplicationProvider: React.FC<ApplicationProviderProps> = ({
         settings,
         fetchSettings,
         addOrUpdateSetting,
+        updateApplicantStatusAndReviewer,
       }}
     >
       {children}

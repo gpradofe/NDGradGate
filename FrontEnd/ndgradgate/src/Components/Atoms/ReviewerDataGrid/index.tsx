@@ -10,7 +10,10 @@ import ReviewerOverview from "../../Pages/ReviewerDashboard.py";
 
 interface DataGridProps {
   data: Applicant[];
-  onRecommendFaculties: (applicationRef: number, facultyIds: number[]) => void;
+  onRecommendFaculties: (
+    applicationRef: number,
+    facultyNames: string[]
+  ) => void;
   onRecommendApplicationDecision: (
     applicationRef: number,
     decision: string
@@ -31,13 +34,13 @@ const ReviewerDataGrid: React.FC<DataGridProps> = ({
   };
 
   const facultyDropdownTemplate = (rowData: Applicant) => {
-    const onFacultyChange = (e: { value: number[] }) => {
+    const onFacultyChange = (e: { value: string[] }) => {
       onRecommendFaculties(rowData.Ref, e.value);
     };
 
     return (
       <MultiSelect
-        value={rowData.FacultyAdvisors?.map((fac) => fac.id)}
+        value={rowData.FacultyAdvisors?.map((fac) => fac.Name)}
         options={facultyOptions}
         onChange={onFacultyChange}
         placeholder="Select faculties"
