@@ -38,7 +38,7 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
 
                 var response = applicants.Select(applicant => new ApplicantDto
                 {
-                    Ref = applicant.Id,
+                    Id = applicant.Id,
                     LastName = applicant.LastName,
                     FirstName = applicant.FirstName,
                     Email = applicant.Email,
@@ -46,7 +46,7 @@ namespace ND.GradGate.Kernel.Application.Applicants.Actions
                     Ethnicity = applicant.Ethnicity,
                     CitizenshipCountry = applicant.Country,
                     AreaOfStudy = applicant.Field,
-                    CurrentDecision = applicant.Decision,
+                    Decision = applicant.Decision,
                     DepartmentRecommendation = applicant.Decision,
                     AcademicHistories = applicant.AcademicHistories.Select(ah => new AcademicHistoryDto
                     {

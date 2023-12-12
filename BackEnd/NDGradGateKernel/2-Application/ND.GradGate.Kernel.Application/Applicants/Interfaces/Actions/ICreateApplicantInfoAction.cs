@@ -9,7 +9,6 @@ namespace ND.GradGate.Kernel.Application.Applicants.Interfaces.Actions
 {
     public interface ICreateApplicantInfoAction
     {
-        Task<bool> CreateApplicantInfoAsync(ApplicantDto applicantDto);
-
+        Task<List<ApplicantDto>> CreateApplicantInfoAsync(List<ApplicantDto> applicantDto);
     }
 }

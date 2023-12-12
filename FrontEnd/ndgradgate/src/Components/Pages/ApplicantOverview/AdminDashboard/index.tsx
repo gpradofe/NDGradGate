@@ -7,6 +7,7 @@ import { useApplicationContext } from "../../../../context/ApplicationContext";
 import Papa from "papaparse";
 import ImportedDataGrid from "../../../Atoms/ImportedDataGrid";
 import { Dialog } from "primereact/dialog";
+import { StyledButton } from "../../AdminDashboard/styles";
 type CSVData = Record<string, string | number>;
 
 const ApplicantOverview: React.FC = () => {
@@ -47,11 +48,14 @@ const ApplicantOverview: React.FC = () => {
           <Col md={12}>
             <Section>
               <Header>Application Overview</Header>
-              <button
+
+              <DataGrid />
+              {renderImportDialog()}
+              <StyledButton
                 onClick={() => document.getElementById("csvInput")?.click()}
               >
                 Import CSV
-              </button>
+              </StyledButton>
               <input
                 id="csvInput"
                 type="file"
@@ -59,8 +63,6 @@ const ApplicantOverview: React.FC = () => {
                 style={{ display: "none" }}
                 onChange={handleFileSelect}
               />
-              <DataGrid />
-              {renderImportDialog()}
             </Section>
           </Col>
         </Row>

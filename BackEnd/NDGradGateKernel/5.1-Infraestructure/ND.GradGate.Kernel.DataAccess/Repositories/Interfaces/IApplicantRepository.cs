@@ -15,5 +15,6 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories.Interfaces
         Task<List<Applicant>> GetByApplicantNameAsync(string firstName, string lastName);
         Task<List<Applicant>> GetAllApplicants();
         Task UpdateApplicantAndRelatedEntitiesAsync(List<Applicant> applicantsToUpdate);
+        Task<List<Applicant>> SaveMultipleAsync(List<Applicant> applicants);
     }
 }

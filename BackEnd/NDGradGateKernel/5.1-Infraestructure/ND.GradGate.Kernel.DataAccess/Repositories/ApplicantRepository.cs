@@ -198,6 +198,32 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories
                 throw;
             }
         }
+        public async Task<List<Applicant>> SaveMultipleAsync(List<Applicant> applicants)
+        {
+            try
+            {
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<KernelGradGateContext>();
+
+                    foreach (var applicant in applicants)
+                    {
+                        await dbContext.AddAsync(applicant);
+                    }
+
+                    await dbContext.SaveChangesAsync();
+
+                    return applicants;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving multiple applicants");
+                return null; 
+            }
+        }
+
+
 
 
         #endregion

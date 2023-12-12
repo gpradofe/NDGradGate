@@ -120,13 +120,13 @@ namespace ND.GradGate.Kernel.Application.Applicants
         }
 
 
-        public async Task<bool> CreateApplicantInfoAsync(ApplicantDto applicantDto)
+        public async Task<List<ApplicantDto>> CreateApplicantInfoAsync(List<ApplicantDto> applicantDto)
         {
             try
             {
                 _logger.LogInformation($"Create applicant data.");
 
-                bool ret = await _createApplicantInfoByIdAction.CreateApplicantInfoAsync(applicantDto);
+                var ret = await _createApplicantInfoByIdAction.CreateApplicantInfoAsync(applicantDto);
 
                 return ret;
             }

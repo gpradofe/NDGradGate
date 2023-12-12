@@ -69,6 +69,7 @@ class ApiService {
       throw error;
     }
   }
+
   public async updateApplicantStatusAndReviewer(
     updateData: Array<{ Ref: number; FacultyId: Array<number>; Status: string }>
   ): Promise<void> {
@@ -85,6 +86,24 @@ class ApiService {
       console.log("Applicant status and reviewer updated:", response.data);
     } catch (error) {
       console.error("Error updating applicant status and reviewer:", error);
+      throw error;
+    }
+  }
+  public async createApplicants(applicants: Applicant[]): Promise<Applicant[]> {
+    try {
+      const response = await axios.post<Applicant[]>(
+        `${this.baseURL}Applicant/CreateApplicant`,
+        JSON.stringify(applicants),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Applicants created:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating applicants:", error);
       throw error;
     }
   }

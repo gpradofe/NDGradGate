@@ -26,6 +26,7 @@ interface ApplicationContextProps {
   updateApplicantStatusAndReviewer: (
     updateData: Array<{ Ref: number; FacultyId: Array<number>; Status: string }>
   ) => Promise<void>;
+  createApplicants: (applicants: Applicant[]) => Promise<void>;
 }
 
 interface ApplicationProviderProps {
@@ -121,7 +122,16 @@ export const ApplicationProvider: React.FC<ApplicationProviderProps> = ({
     fetchFaculty();
     fetchSettings();
   }, []);
-
+  const createApplicants = async (applicants: Applicant[]): Promise<void> => {
+    try {
+      console.log("applicants: ", applications);
+      await apiServiceInstance.createApplicants(applicants);
+      fetchApplications(); // Refetch applications after creation
+    } catch (error) {
+      console.error("Error creating applicants:", error);
+      throw error;
+    }
+  };
   return (
     <ApplicationContext.Provider
       value={{
@@ -138,6 +148,7 @@ export const ApplicationProvider: React.FC<ApplicationProviderProps> = ({
         fetchSettings,
         addOrUpdateSetting,
         updateApplicantStatusAndReviewer,
+        createApplicants,
       }}
     >
       {children}

@@ -27,7 +27,7 @@ export interface FacultyAdvisor {
 }
 
 export interface Applicant {
-  Ref: number;
+  Id: number;
   LastName: string;
   FirstName: string;
   Email: string;
@@ -35,7 +35,7 @@ export interface Applicant {
   Ethnicity: string;
   CitizenshipCountry: string;
   AreaOfStudy: string;
-  ApplicationStatus: string;
+  Decision: string;
   DepartmentRecommendation: string | null;
   AcademicHistories: AcademicHistory[];
   FacultyAdvisors: FacultyAdvisor[];

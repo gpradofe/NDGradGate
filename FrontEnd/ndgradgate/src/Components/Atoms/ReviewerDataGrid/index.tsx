@@ -35,7 +35,7 @@ const ReviewerDataGrid: React.FC<DataGridProps> = ({
 
   const facultyDropdownTemplate = (rowData: Applicant) => {
     const onFacultyChange = (e: { value: string[] }) => {
-      onRecommendFaculties(rowData.Ref, e.value);
+      onRecommendFaculties(rowData.Id, e.value);
     };
 
     return (
@@ -52,12 +52,12 @@ const ReviewerDataGrid: React.FC<DataGridProps> = ({
 
   const decisionDropdownTemplate = (rowData: Applicant) => {
     const onDecisionChange = (e: { value: string }) => {
-      onRecommendApplicationDecision(rowData.Ref, e.value);
+      onRecommendApplicationDecision(rowData.Id, e.value);
     };
 
     return (
       <Dropdown
-        value={rowData.ApplicationStatus}
+        value={rowData.Status}
         options={[
           { label: "Accept", value: "Accept" },
           { label: "Reject", value: "Reject" },
@@ -90,7 +90,7 @@ const ReviewerDataGrid: React.FC<DataGridProps> = ({
         header={header}
         paginator
         rows={10}
-        dataKey="Ref"
+        dataKey="Id"
         emptyMessage="No applications found."
       >
         <Column field="FirstName" header="First Name" />

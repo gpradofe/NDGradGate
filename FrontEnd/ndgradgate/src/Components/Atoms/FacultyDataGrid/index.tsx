@@ -18,10 +18,10 @@ const FacultyDataGrid: React.FC<DataGridProps> = ({
     return rowData.FacultyAdvisors.map((advisor, index) => (
       <div key={index}>
         {advisor.Name}
-        <button onClick={() => onAdvisorAcceptance(rowData.Ref, advisor.Name)}>
+        <button onClick={() => onAdvisorAcceptance(rowData.Id, advisor.Name)}>
           Accept
         </button>
-        <button onClick={() => onAdvisorRejection(rowData.Ref, advisor.Name)}>
+        <button onClick={() => onAdvisorRejection(rowData.Id, advisor.Name)}>
           Reject
         </button>
       </div>

@@ -146,7 +146,7 @@ namespace ND.GradGate.Kernel.Controllers
         [ProducesResponseType(typeof(ApplicantDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ApplicantDto>> CreateApplicant([FromBody] ApplicantDto applicant)
+        public async Task<ActionResult<List<ApplicantDto>>> CreateApplicant([FromBody] List<ApplicantDto> applicant)
         {
             if (applicant == null)
             {
@@ -155,9 +155,9 @@ namespace ND.GradGate.Kernel.Controllers
 
             var result = await _applicantApplication.CreateApplicantInfoAsync(applicant);
 
-            if (result)
+            if (result.Any())
             {
-                return CreatedAtAction(nameof(_applicantApplication.CreateApplicantInfoAsync), new { id = applicant.Ref }, applicant);
+                return Ok(result);
             }
             else
             {

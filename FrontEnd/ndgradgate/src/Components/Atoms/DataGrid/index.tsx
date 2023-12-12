@@ -26,11 +26,10 @@ const DataGrid: React.FC = ({}) => {
   const [localData, setLocalData] = useState<Applicant[]>([]);
   const [isChanged, setIsChanged] = useState(false);
   const hasApplicantChanged = (applicant: Applicant) => {
-    const originalApplicant = applications.find((a) => a.Ref === applicant.Ref);
+    const originalApplicant = applications.find((a) => a.Id === applicant.Id);
     if (!originalApplicant) return false;
 
-    const isStatusChanged =
-      applicant.ApplicationStatus !== originalApplicant.ApplicationStatus;
+    const isStatusChanged = applicant.Status !== originalApplicant.Status;
     const isReviewersChanged =
       JSON.stringify(applicant.Reviewers.map((r) => r.FacultyId).sort()) !==
       JSON.stringify(
@@ -44,7 +43,7 @@ const DataGrid: React.FC = ({}) => {
     { label: "First Name", value: "FirstName" },
     { label: "Last Name", value: "LastName" },
     { label: "Email", value: "Email" },
-    { label: "Application Status", value: "ApplicationStatus" },
+    { label: "Application Status", value: "Status" },
     { label: "Area of Study", value: "AreaOfStudy" },
     { label: "Citizenship Country", value: "CitizenshipCountry" },
     { label: "Department Recommendation", value: "DepartmentRecommendation" },
@@ -85,9 +84,9 @@ const DataGrid: React.FC = ({}) => {
   };
   const applyChanges = () => {
     const updateData = localData.filter(hasApplicantChanged).map((app) => ({
-      Ref: app.Ref,
+      Ref: app.Id,
       FacultyId: app.Reviewers.map((r) => r.FacultyId),
-      Status: app.ApplicationStatus,
+      Status: app.Status,
     }));
 
     if (updateData.length > 0) {
@@ -124,21 +123,21 @@ const DataGrid: React.FC = ({}) => {
   const renderReviewerMultiSelect = (rowData: Applicant) => {
     const selectedFacultyIds =
       localData
-        .find((app) => app.Ref === rowData.Ref)
+        .find((app) => app.Id === rowData.Id)
         ?.Reviewers.map((r) => r.FacultyId) || [];
 
     return (
       <MultiSelect
         value={selectedFacultyIds}
         options={facultyOptions}
-        onChange={(e) => assignReviewer(rowData.Ref, e.value)}
+        onChange={(e) => assignReviewer(rowData.Id, e.value)}
         placeholder="Select Reviewers"
       />
     );
   };
   const assignReviewer = (applicationRef: number, reviewerIds: number[]) => {
     const updatedLocalData = localData.map((app) => {
-      if (app.Ref === applicationRef) {
+      if (app.Id === applicationRef) {
         // Map selected reviewer IDs to Reviewer objects
         const newReviewers = reviewerIds.map((facultyId) => {
           const facultyMember = faculty.find((f) => f.Id === facultyId);
@@ -162,7 +161,7 @@ const DataGrid: React.FC = ({}) => {
   };
   const updateApplicationStatus = (applicationRef: number, status: string) => {
     const updatedLocalData = localData.map((app) => {
-      if (app.Ref === applicationRef) {
+      if (app.Id === applicationRef) {
         return { ...app, ApplicationStatus: status };
       }
       return app;
@@ -203,12 +202,12 @@ const DataGrid: React.FC = ({}) => {
 
   const renderStatusDropdown = (rowData: Applicant) => {
     const currentStatus =
-      localData.find((app) => app.Ref === rowData.Ref)?.Status || "";
+      localData.find((app) => app.Id === rowData.Id)?.Status || "";
     return (
       <Dropdown
         value={currentStatus}
         options={statusOptions}
-        onChange={(e) => updateApplicationStatus(rowData.Ref, e.value)}
+        onChange={(e) => updateApplicationStatus(rowData.Id, e.value)}
         placeholder="Select Status"
       />
     );
@@ -218,7 +217,7 @@ const DataGrid: React.FC = ({}) => {
     const allExpandedRows: ExpandedRows = {};
     applications.forEach((app) => {
       if (app.Attributes && app.Attributes.length > 0) {
-        allExpandedRows[app.Ref] = true;
+        allExpandedRows[app.Id] = true;
       }
     });
     setExpandedRows(allExpandedRows);
@@ -351,7 +350,7 @@ const DataGrid: React.FC = ({}) => {
         globalFilter={globalFilter}
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         rowsPerPageOptions={[5, 10, 20, 50]}
-        dataKey="Ref"
+        dataKey="Id"
         emptyMessage="No applications found."
         expandedRows={expandedRows}
         onRowToggle={(e) => setExpandedRows(e.data)}
