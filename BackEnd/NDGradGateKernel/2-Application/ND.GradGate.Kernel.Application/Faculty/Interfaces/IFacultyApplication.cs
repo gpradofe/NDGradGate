@@ -12,6 +12,8 @@ namespace ND.GradGate.Kernel.Application.Facultys.Interfaces
         Task<FacultyDto> GetFacultyByIdAsync(int refId);
         Task<List<FacultyDto>> GetFacultysByNameAsync(string name);
         Task<List<FacultyDto>> GetAllFaculty();
-
+        Task<List<int>> GetAsssinedApplicantionsByReviewerIdAsync(int reviewerId);
+        Task<bool> AssignPotentialAdvisorsAndAddCommentsAsync(List<AssignFacultyAndAddComment> assignFacultyAndAddComments);
+        Task<List<FacultyDto>> SaveOrUpdateFacultyAsync(List<FacultyDto> facultyDtos);
     }
 }

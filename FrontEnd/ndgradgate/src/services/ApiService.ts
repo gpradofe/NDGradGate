@@ -107,6 +107,80 @@ class ApiService {
       throw error;
     }
   }
+  public async assignPotentialAdvisorsAndAddComments(
+    data: Array<{
+      SenderId: number;
+      ApplicantID: number;
+      PotentialAdvisorId: Array<number>;
+      Comment: string;
+    }>
+  ): Promise<boolean> {
+    try {
+      const response = await axios.put(
+        `${this.baseURL}Faculty/AssignPotentialAdvisorsAndAddComments`,
+        JSON.stringify(data),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(
+        "Potential advisors assigned and comments added:",
+        response.data
+      );
+      return response.status === 200;
+    } catch (error) {
+      console.error(
+        "Error assigning potential advisors and adding comments:",
+        error
+      );
+      throw error;
+    }
+  }
+  public async saveOrUpdateFaculty(
+    facultyData: Array<{
+      Id: number;
+      Name: string;
+      Email: string;
+      IsReviewer: boolean;
+      Field: string;
+    }>
+  ): Promise<boolean> {
+    try {
+      const response = await axios.post(
+        `${this.baseURL}Faculty/SaveOrUpdateFaculty`,
+        JSON.stringify(facultyData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Faculty saved/updated:", response.data);
+      return response.status === 200;
+    } catch (error) {
+      console.error("Error saving/updating faculty:", error);
+      throw error;
+    }
+  }
+  public async getAssignedReviewer(reviewerId: number): Promise<number[]> {
+    try {
+      const response = await axios.get<number[]>(
+        `${this.baseURL}Faculty/GetAssignedReviewer?reviewerId=${reviewerId}`,
+        {
+          headers: {
+            accept: "application/json",
+          },
+        }
+      );
+      console.log("Assigned reviewer data fetched:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching assigned reviewer data:", error);
+      throw error;
+    }
+  }
 }
 
 const apiServiceInstance = new ApiService();

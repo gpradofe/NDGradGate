@@ -1,3 +1,5 @@
+import { PotentialAdvisorDto } from "./Faculty";
+
 export interface AcademicHistory {
   GPA: number;
   Institution: string;
@@ -22,10 +24,6 @@ export interface Reviewer {
   Recommendation: string;
 }
 
-export interface FacultyAdvisor {
-  Name: string;
-}
-
 export interface Applicant {
   Id: number;
   LastName: string;
@@ -38,7 +36,7 @@ export interface Applicant {
   Decision: string;
   DepartmentRecommendation: string | null;
   AcademicHistories: AcademicHistory[];
-  FacultyAdvisors: FacultyAdvisor[];
+  FacultyAdvisors: PotentialAdvisorDto[];
   Reviewers: Reviewer[];
   Attributes: ApplicantAttribute[];
   Comments: Comment[];

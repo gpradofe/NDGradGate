@@ -37,6 +37,9 @@ namespace ND.GradGate.Kernel.StartupConfiguration
             services.AddSingleton<IGetAllFacultyAction, GetAllFacultyAction>();
             services.AddSingleton<IGetFacultyInfoByIdAction, GetFacultyInfoByIdAction>();
             services.AddSingleton<IGetFacultysInfoByNameAction, GetFacultysInfoByNameAction>();
+            services.AddSingleton<IGetAssignedApplicationsForReviewerAction, GetAssignedApplicationsForReviewerAction>();
+            services.AddSingleton<IAssignPotentialAdvisorsAndAddCommentsAction, AssignPotentialAdvisorsAndAddCommentsAction>();
+            services.AddSingleton<ICreateOrUpdateFacultyAction, CreateOrUpdateFacultyAction>();
 
 
             services.AddSingleton<IGetSettingByKeyAction, GetSettingByKeyAction>();

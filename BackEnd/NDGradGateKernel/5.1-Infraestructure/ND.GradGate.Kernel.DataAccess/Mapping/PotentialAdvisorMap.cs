@@ -15,21 +15,27 @@ namespace ND.GradGate.Kernel.DataAccess.Mapping
         {
             builder.ToTable("potential_advisors");
 
-            // Key
-            builder.HasKey(pa => new { pa.FacultyId, pa.ApplicantId }).HasName("pk_potential_advisors");
+            // Primary Key
+            builder.HasKey(pa => pa.Id).HasName("potential_advisors_pkey");
 
             // Fields
+            builder.Property(pa => pa.Id).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
             builder.Property(pa => pa.FacultyId).HasColumnName("faculty_id").IsRequired();
             builder.Property(pa => pa.ApplicantId).HasColumnName("applicant_id").IsRequired();
+
+            // Unique Constraint
+            builder.HasIndex(pa => new { pa.FacultyId, pa.ApplicantId }).IsUnique();
 
             // Relationships
             builder.HasOne(pa => pa.Faculty)
                    .WithMany(f => f.PotentialAdvisors)
-                   .HasForeignKey(pa => pa.FacultyId);
+                   .HasForeignKey(pa => pa.FacultyId)
+                   .HasConstraintName("potential_advisors_faculty_fk");
 
             builder.HasOne(pa => pa.Applicant)
                    .WithMany(a => a.PotentialAdvisors)
-                   .HasForeignKey(pa => pa.ApplicantId);
+                   .HasForeignKey(pa => pa.ApplicantId)
+                   .HasConstraintName("potential_advisors_applicant_fk");
         }
     }
 

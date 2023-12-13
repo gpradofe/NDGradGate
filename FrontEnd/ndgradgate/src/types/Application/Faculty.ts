@@ -1,7 +1,5 @@
 export interface PotentialAdvisorDto {
   Id: number;
-  Name: string;
-  ExpertiseArea: string;
 }
 
 export interface ReviewerAssignmentDto {
@@ -11,9 +9,9 @@ export interface ReviewerAssignmentDto {
 }
 
 export interface CommentDto {
-  CommentId: number;
-  Text: string;
-  AuthorName: string;
+  FacultyId: number;
+  ApplicantId: number;
+  Content: string;
 }
 
 export interface Faculty {

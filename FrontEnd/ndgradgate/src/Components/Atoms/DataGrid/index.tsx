@@ -291,7 +291,7 @@ const DataGrid: React.FC = ({}) => {
     return rowData.Attributes && rowData.Attributes.length > 0;
   };
   const rowExpansionTemplate = (data: Applicant) => {
-    // Aggregate attributes into a single object
+    // Aggregate attributes into a singe object
     type AttributesData = { [key: string]: string };
 
     // Aggregate attributes into a single object with a specified type

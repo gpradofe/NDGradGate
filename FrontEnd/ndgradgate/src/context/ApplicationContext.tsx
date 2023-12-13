@@ -27,6 +27,26 @@ interface ApplicationContextProps {
     updateData: Array<{ Ref: number; FacultyId: Array<number>; Status: string }>
   ) => Promise<void>;
   createApplicants: (applicants: Applicant[]) => Promise<void>;
+  assignPotentialAdvisorsAndAddComments: (
+    data: Array<{
+      SenderId: number;
+      ApplicantID: number;
+      PotentialAdvisorId: Array<number>;
+      Comment: string;
+    }>
+  ) => Promise<boolean>;
+
+  saveOrUpdateFaculty: (
+    facultyData: Array<{
+      Id: number;
+      Name: string;
+      Email: string;
+      IsReviewer: boolean;
+      Field: string;
+    }>
+  ) => Promise<boolean>;
+
+  getAssignedReviewer: (reviewerId: number) => Promise<number[]>;
 }
 
 interface ApplicationProviderProps {
@@ -132,6 +152,52 @@ export const ApplicationProvider: React.FC<ApplicationProviderProps> = ({
       throw error;
     }
   };
+  const assignPotentialAdvisorsAndAddComments = async (
+    data: Array<{
+      SenderId: number;
+      ApplicantID: number;
+      PotentialAdvisorId: Array<number>;
+      Comment: string;
+    }>
+  ) => {
+    try {
+      return await apiServiceInstance.assignPotentialAdvisorsAndAddComments(
+        data
+      );
+    } catch (error) {
+      console.error(
+        "Error assigning potential advisors and adding comments:",
+        error
+      );
+      return false;
+    }
+  };
+
+  const saveOrUpdateFaculty = async (
+    facultyData: Array<{
+      Id: number;
+      Name: string;
+      Email: string;
+      IsReviewer: boolean;
+      Field: string;
+    }>
+  ) => {
+    try {
+      return await apiServiceInstance.saveOrUpdateFaculty(facultyData);
+    } catch (error) {
+      console.error("Error saving/updating faculty:", error);
+      return false;
+    }
+  };
+
+  const getAssignedReviewer = async (reviewerId: number) => {
+    try {
+      return await apiServiceInstance.getAssignedReviewer(reviewerId);
+    } catch (error) {
+      console.error("Error fetching assigned reviewer data:", error);
+      throw error;
+    }
+  };
   return (
     <ApplicationContext.Provider
       value={{
@@ -149,6 +215,9 @@ export const ApplicationProvider: React.FC<ApplicationProviderProps> = ({
         addOrUpdateSetting,
         updateApplicantStatusAndReviewer,
         createApplicants,
+        assignPotentialAdvisorsAndAddComments,
+        saveOrUpdateFaculty,
+        getAssignedReviewer,
       }}
     >
       {children}

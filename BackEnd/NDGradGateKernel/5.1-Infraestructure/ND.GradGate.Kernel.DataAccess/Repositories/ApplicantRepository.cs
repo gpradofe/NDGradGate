@@ -145,6 +145,34 @@ namespace ND.GradGate.Kernel.DataAccess.Repositories
                 throw;
             }
         }
+        public async Task<List<Applicant>> GetApplicantByReviewerId(int reviewerId)
+        {
+            try
+            {
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    KernelGradGateContext dbContext = scope.ServiceProvider.GetRequiredService<KernelGradGateContext>();
+                    DbSet<Applicant> dataset = dbContext.Set<Applicant>();
+
+                    IQueryable<Applicant> applicantQuery = dataset
+                                            .Include(a => a.AcademicHistories)
+                                            .Include(a => a.ReviewerAssignments)
+                                            .Include(a => a.PotentialAdvisors)
+                                            .Include(a => a.ApplicantAttributes)
+                                            .Where(a => a.ReviewerAssignments.Any(a => a.FacultyId == reviewerId));
+
+
+                    var applicants = await applicantQuery.ToListAsync();
+
+                    return applicants;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+        }
         public async Task UpdateApplicantAndRelatedEntitiesAsync(List<Applicant> applicantsToUpdate)
         {
             try

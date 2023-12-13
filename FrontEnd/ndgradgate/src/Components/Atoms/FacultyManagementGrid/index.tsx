@@ -17,7 +17,8 @@ const FacultyManagementGrid: React.FC<FacultyManagementGridProps> = ({
   valueTabIndex,
   index,
 }) => {
-  const { faculty, fetchFaculty } = useApplicationContext();
+  const { faculty, fetchFaculty, saveOrUpdateFaculty } =
+    useApplicationContext();
 
   const [first, setFirst] = useState(0);
   const [totalRecords, setTotalRecords] = useState(faculty.length);
@@ -106,12 +107,24 @@ const FacultyManagementGrid: React.FC<FacultyManagementGridProps> = ({
   };
   const applyChanges = async () => {
     try {
-      await fetchFaculty();
+      // Combine all changes into a single array
+      const allChanges = [...addedFaculty, ...updatedFaculty];
 
-      setAddedFaculty([]);
-      setUpdatedFaculty([]);
-      setDeletedFacultyIds([]);
-      setIsDataChanged(false);
+      // Call the saveOrUpdateFaculty method from the ApplicationContext
+      const success = await saveOrUpdateFaculty(allChanges);
+      if (success) {
+        // Optionally, refetch the faculty list to sync with the backend
+        await fetchFaculty();
+
+        // Reset local changes
+        setAddedFaculty([]);
+        setUpdatedFaculty([]);
+        setDeletedFacultyIds([]);
+        setIsDataChanged(false);
+      } else {
+        // Handle error case
+        console.error("Error applying changes");
+      }
     } catch (error) {
       console.error("Error applying changes:", error);
     }

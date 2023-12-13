@@ -44,12 +44,7 @@ const ReviewerOverviewPage: React.FC = () => {
           <Col md={12}>
             <Section>
               <Header>Reviewer Overview</Header>
-              <ReviewerDataGrid
-                data={assignedApplications}
-                onRecommendFaculties={recommendFaculties}
-                onRecommendApplicationDecision={recommendApplicationDecision}
-                facultyOptions={facultyOptions}
-              />
+              <ReviewerDataGrid />
             </Section>
           </Col>
         </Row>

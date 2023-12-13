@@ -27,17 +27,17 @@ namespace ND.GradGate.Kernel.Controllers
             {
 
 
-                    _logger.LogInformation($"Getting all Facutly.");
+                _logger.LogInformation($"Getting all Facutly.");
 
-                    List<FacultyDto> response = await _facultyApplication.GetAllFaculty();
-                    if (response != null && response.Any())
-                    {
-                        return Ok(response);
-                    }
-                    else
-                    {
-                        return NoContent();
-                    }
+                List<FacultyDto> response = await _facultyApplication.GetAllFaculty();
+                if (response != null && response.Any())
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return NoContent();
+                }
             }
             catch (Exception ex)
             {
@@ -46,7 +46,77 @@ namespace ND.GradGate.Kernel.Controllers
             }
         }
 
+        [HttpGet("GetAssignedReviewer")]
+        public async Task<IActionResult> GetAssignedApplicantsForReviewer(int reviewerId)
+        {
+            try
+            {
 
+                _logger.LogInformation($"Getting all Facutly.");
+
+                List<int> response = await _facultyApplication.GetAsssinedApplicantionsByReviewerIdAsync(reviewerId);
+                if (response != null && response.Any())
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error on GetAllFacutly Controller Method");
+                throw ex;
+            }
+        }
+        [HttpPut("AssignPotentialAdvisorsAndAddComments")]
+        public async Task<IActionResult> AssignPotentialAdvisorsAndAddComments([FromBody]  List<AssignFacultyAndAddComment> assignFacultyAndAddComments)
+        {
+            try
+            {
+
+                _logger.LogInformation($"Getting all Facutly.");
+
+                bool response = await _facultyApplication.AssignPotentialAdvisorsAndAddCommentsAsync(assignFacultyAndAddComments);
+                if ( response)
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error on GetAllFacutly Controller Method");
+                throw ex;
+            }
+        }
+        [HttpPost("SaveOrUpdateFaculty")]
+        public async Task<IActionResult> SaveOrUpdateFaculty([FromBody] List<FacultyDto> facultyDtos)
+        {
+            try
+            {
+                _logger.LogInformation("Processing save or update request for faculty.");
+
+                List<FacultyDto> result = await _facultyApplication.SaveOrUpdateFacultyAsync(facultyDtos);
+                if (result.Any())
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in SaveOrUpdateFaculty endpoint");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
         #endregion
     }
 }
