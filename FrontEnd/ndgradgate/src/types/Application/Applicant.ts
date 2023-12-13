@@ -1,21 +1,44 @@
+import { PotentialAdvisorDto } from "./Faculty";
+
 export interface AcademicHistory {
   GPA: number;
   Institution: string;
-  Major: string | null; // 'null' is a valid type in TypeScript to signify that the value can explicitly be null
+  Major: string | null;
+}
+
+export interface ApplicantAttribute {
+  Attribute: string;
+  Value: string;
+}
+
+export interface Comment {
+  FacultyId: number;
+  ApplicantId: number;
+  Content: string;
+  Date: Date;
+}
+
+export interface Reviewer {
+  FacultyId: number;
+  Name: string;
+  Recommendation: string;
 }
 
 export interface Applicant {
-  AcademicHistories: AcademicHistory[];
-  ApplicationStatus: string;
-  AreaOfStudy: string;
-  CitizenshipCountry: string;
-  DepartmentRecommendation: string | null;
-  Email: string;
-  Ethnicity: string;
-  FacultyAdvisors: any[]; // If you have a specific type for faculty advisors, replace 'any' with that type
-  FirstName: string;
+  Id: number;
   LastName: string;
-  Ref: number; // Assuming Ref is a unique identifier for the applicant and should be a number
-  Reviewers: any[]; // Similar to FacultyAdvisors, replace 'any' with the specific type if available
-  Sex: string; // 'M', 'F', or any other designation of sex or gender should be a string
+  FirstName: string;
+  Email: string;
+  Sex: string;
+  Ethnicity: string;
+  CitizenshipCountry: string;
+  AreaOfStudy: string;
+  Decision: string;
+  DepartmentRecommendation: string | null;
+  AcademicHistories: AcademicHistory[];
+  FacultyAdvisors: PotentialAdvisorDto[];
+  Reviewers: Reviewer[];
+  Attributes: ApplicantAttribute[];
+  Comments: Comment[];
+  Status: string;
 }

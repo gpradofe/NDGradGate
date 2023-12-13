@@ -21,6 +21,7 @@ public class ApplicantMap : IEntityTypeConfiguration<Applicant>
         builder.Property(a => a.Country).HasColumnName("country");
         builder.Property(a => a.Field).HasColumnName("field");
         builder.Property(a => a.Decision).HasColumnName("decision");
+        builder.Property(a => a.Status).HasColumnName("status");
 
         // Relationships
         builder.HasMany(a => a.AcademicHistories)

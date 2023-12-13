@@ -15,6 +15,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import styled from "styled-components";
 import SideBar from "./Components/Organisms/SideBar";
@@ -24,8 +25,15 @@ import AdminDashboard from "./Components/Pages/AdminDashboard";
 import ReviewerOverviewPage from "./Components/Pages/ReviewerDashboard.py";
 import FacultyDashboard from "./Components/Pages/ProfessorDashboard";
 import AnalyticsDashboard from "./Components/Pages/AnalyticsDashboard";
+import {
+  ApplicationProvider,
+  useApplicationContext,
+} from "./context/ApplicationContext";
+import { ToastContainer } from "react-toastify";
 
 function MainContent() {
+  const { currentUser } = useApplicationContext();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
 
@@ -48,11 +56,49 @@ function MainContent() {
       <ContentContainer>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/ApplicantOverview" element={<ApplicantOverview />} />
-          <Route path="/facultyDashboard" element={<FacultyDashboard />} />
-          <Route path="/reviewerDashboard" element={<ReviewerOverviewPage />} />
-          <Route path="/adminDashboard" element={<AdminDashboard />} />
-          <Route path="/analyticsDashboard" element={<AnalyticsDashboard />} />
+          {currentUser && (
+            <>
+              {currentUser.IsAdmin && (
+                <>
+                  <Route
+                    path="/ApplicantOverview"
+                    element={<ApplicantOverview />}
+                  />
+                  <Route path="/adminDashboard" element={<AdminDashboard />} />
+                  <Route
+                    path="/reviewerDashboard"
+                    element={<ReviewerOverviewPage />}
+                  />
+                  <Route
+                    path="/facultyDashboard"
+                    element={<FacultyDashboard />}
+                  />
+                  <Route
+                    path="/analyticsDashboard"
+                    element={<AnalyticsDashboard />}
+                  />
+                </>
+              )}
+              {currentUser.IsReviewer && !currentUser.IsAdmin && (
+                <>
+                  <Route
+                    path="/reviewerDashboard"
+                    element={<ReviewerOverviewPage />}
+                  />
+                  <Route
+                    path="/facultyDashboard"
+                    element={<FacultyDashboard />}
+                  />
+                </>
+              )}
+              {!currentUser.IsReviewer && !currentUser.IsAdmin && (
+                <Route
+                  path="/facultyDashboard"
+                  element={<FacultyDashboard />}
+                />
+              )}
+            </>
+          )}
         </Routes>
       </ContentContainer>
     </div>
@@ -61,9 +107,12 @@ function MainContent() {
 
 function App() {
   return (
-    <Router>
-      <MainContent />
-    </Router>
+    <ApplicationProvider>
+      <Router>
+        <MainContent />
+      </Router>
+      <ToastContainer />
+    </ApplicationProvider>
   );
 }
 

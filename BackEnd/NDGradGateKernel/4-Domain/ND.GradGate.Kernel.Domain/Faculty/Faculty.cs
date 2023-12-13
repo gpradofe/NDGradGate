@@ -10,11 +10,11 @@ namespace ND.GradGate.Kernel.Domain.Faculty
 {
     public class Faculty : AbstractEntity<Faculty, int>
     {
-        public string Email { get; set; }
+        public string? Email { get; set; }
         public string Name { get; set; }
-        public bool IsAdmin { get; set; }
-        public bool IsReviewer { get; set; }
-        public string Field { get; set; }
+        public bool? IsAdmin { get; set; }
+        public bool? IsReviewer { get; set; }
+        public string? Field { get; set; }
 
         // Relationships
         public virtual ICollection<PotentialAdvisor> PotentialAdvisors { get; set; }

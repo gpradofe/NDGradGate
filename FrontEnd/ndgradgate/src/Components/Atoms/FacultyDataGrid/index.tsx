@@ -5,8 +5,8 @@ import { Applicant } from "../../../types/Application/Applicant";
 
 interface DataGridProps {
   data: Applicant[];
-  onAdvisorAcceptance: (applicationRef: number, facultyId: number) => void;
-  onAdvisorRejection: (applicationRef: number, facultyId: number) => void;
+  onAdvisorAcceptance: (applicationRef: number, facultyName: string) => void;
+  onAdvisorRejection: (applicationRef: number, facultyName: string) => void;
 }
 
 const FacultyDataGrid: React.FC<DataGridProps> = ({
@@ -14,32 +14,6 @@ const FacultyDataGrid: React.FC<DataGridProps> = ({
   onAdvisorAcceptance,
   onAdvisorRejection,
 }) => {
-  const renderAdvisorDecision = (rowData: Applicant) => {
-    return rowData.FacultyAdvisors.map((advisor, index) => (
-      <div key={index}>
-        {advisor.name}
-        <button onClick={() => onAdvisorAcceptance(rowData.Ref, advisor.id)}>
-          Accept
-        </button>
-        <button onClick={() => onAdvisorRejection(rowData.Ref, advisor.id)}>
-          Reject
-        </button>
-      </div>
-    ));
-  };
-
-  const renderAcademicHistory = (rowData: Applicant) => {
-    return rowData.AcademicHistories.map((history, index) => (
-      <div key={index}>
-        <b>Institution:</b> {history.Institution}
-        <br />
-        <b>Major:</b> {history.Major}
-        <br />
-        <b>GPA:</b> {history.GPA.toFixed(2)}
-      </div>
-    ));
-  };
-
   return (
     <DataTable value={data} paginator rows={10} dataKey="Ref">
       <Column field="FirstName" header="First Name" />
@@ -50,12 +24,6 @@ const FacultyDataGrid: React.FC<DataGridProps> = ({
       <Column field="CitizenshipCountry" header="Citizenship Country" />
       <Column field="Ethnicity" header="Ethnicity" />
       <Column field="Sex" header="Sex" />
-      <Column
-        field="AcademicHistories"
-        header="Academic Histories"
-        body={renderAcademicHistory}
-      />
-      <Column header="Advisor Decision" body={renderAdvisorDecision} />
     </DataTable>
   );
 };

@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.p-datatable .p-datatable-tbody > tr {
+  border-bottom: 1px solid #a6a6a6; /* Darker shade of gray */
+}
+.p-datatable .p-datatable-thead > tr > th {
+  background-color: #d2d1d1d3; /* Light grey color */
+}

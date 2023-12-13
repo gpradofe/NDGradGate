@@ -8,7 +8,8 @@ namespace ND.GradGate.Kernel.Domain.Contracts.Faculty
 {
     public class ReviewerDto
     {
-        public string Name { get; set; }
+        
         public string Recommendation { get; set; }
+        public int FacultyId { get; set; }
     }
 }

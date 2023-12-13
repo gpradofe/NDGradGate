@@ -38,7 +38,6 @@ namespace ND.GradGate.Kernel.Application.Facultys.Actions
 
                 var response = Facultys.Select(Faculty => new FacultyDto
                 {
-                    Ref = Faculty.Id,
                     Name = Faculty.Name,
                 }).ToList();
 

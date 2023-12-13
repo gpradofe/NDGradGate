@@ -13,9 +13,12 @@ const ReviewerOverviewPage: React.FC = () => {
   const [faculty, setFaculty] = useState<Faculty[]>([]);
   const toast = useRef<Toast>(null);
 
-  const recommendFaculties = (applicationRef: number, facultyIds: number[]) => {
+  const recommendFaculties = (
+    applicationRef: number,
+    facultyNames: string[]
+  ) => {
     console.log(
-      `Recommend faculties ${facultyIds} for application ${applicationRef}`
+      `Recommend faculties ${facultyNames} for application ${applicationRef}`
     );
   };
 
@@ -29,8 +32,8 @@ const ReviewerOverviewPage: React.FC = () => {
   };
 
   const facultyOptions = faculty.map((fac) => ({
-    label: fac.name,
-    value: fac.id,
+    label: fac.Name,
+    value: fac.Id,
   }));
 
   return (
@@ -41,12 +44,7 @@ const ReviewerOverviewPage: React.FC = () => {
           <Col md={12}>
             <Section>
               <Header>Reviewer Overview</Header>
-              <ReviewerDataGrid
-                data={assignedApplications}
-                onRecommendFaculties={recommendFaculties}
-                onRecommendApplicationDecision={recommendApplicationDecision}
-                facultyOptions={facultyOptions}
-              />
+              <ReviewerDataGrid />
             </Section>
           </Col>
         </Row>

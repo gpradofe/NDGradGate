@@ -146,7 +146,7 @@ namespace ND.GradGate.Kernel.Controllers
         [ProducesResponseType(typeof(ApplicantDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ApplicantDto>> CreateApplicant([FromBody] ApplicantDto applicant)
+        public async Task<ActionResult<List<ApplicantDto>>> CreateApplicant([FromBody] List<ApplicantDto> applicant)
         {
             if (applicant == null)
             {
@@ -155,9 +155,9 @@ namespace ND.GradGate.Kernel.Controllers
 
             var result = await _applicantApplication.CreateApplicantInfoAsync(applicant);
 
-            if (result)
+            if (result.Any())
             {
-                return CreatedAtAction(nameof(_applicantApplication.CreateApplicantInfoAsync), new { id = applicant.Ref }, applicant);
+                return Ok(result);
             }
             else
             {
@@ -193,7 +193,29 @@ namespace ND.GradGate.Kernel.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
             }
         }
+        [HttpPut("UpdateApplicantStatusAndReviewer")]
+        public async Task<IActionResult> UpdateApplicantStatus(List<UpdateApplicantStatusAndReviewerDto> applicantUpdateDto)
+        {
+            try
+            {
 
+
+                bool result = await _applicantApplication.UpdateApplicantStatusAndReviewerAsync(applicantUpdateDto);
+                if (!result)
+                {
+                    // Log the error or handle the case where the deletion is not successful
+                    _logger.LogError($"Failed to update status of applicants: {applicantUpdateDto}.");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred while deleting the applicant.");
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while updating applicants: {applicantUpdateDto}: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
+            }
+        }
 
         #endregion
     }
