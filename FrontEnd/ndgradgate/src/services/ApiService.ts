@@ -3,7 +3,7 @@ import { Applicant } from "../types/Application/Applicant";
 import { Faculty } from "../types/Application/Faculty";
 import { Setting } from "../types/Settings/Setting";
 class ApiService {
-  private baseURL: string = "https://localhost:5009/api/"; // Replace with your actual base URL
+  private baseURL: string = "https://api.gradgate.org/api/"; // Replace with your actual base URL
 
   public async fetchApplications(): Promise<Applicant[]> {
     try {
